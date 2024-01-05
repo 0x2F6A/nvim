@@ -74,6 +74,227 @@ local plugins = {
   },
 
   {
+    "williamboman/mason.nvim",
+    dependencies = {
+      {
+        "williamboman/mason-lspconfig.nvim",
+        opts = {
+          automatic_installation = false,
+        },
+      },
+    },
+    cmd = { "Mason", "MasonInstall", "MasonInstallAll", "MasonUpdate" },
+    opts = function()
+      return require("devil.plugins.configs.mason")
+    end,
+    config = function(_, opts)
+      require("mason").setup(opts)
+
+      -- custom nvchad cmd to install all mason binaries listed
+      vim.api.nvim_create_user_command("MasonInstallAll", function()
+        if opts.ensure_installed and #opts.ensure_installed > 0 then
+          vim.cmd("MasonInstall " .. table.concat(opts.ensure_installed, " "))
+        end
+      end, {})
+
+      vim.g.mason_binaries_list = opts.ensure_installed
+    end,
+  },
+
+  {
+    "neovim/nvim-lspconfig",
+    init = function()
+      require("devil.core.utils").lazy_load("nvim-lspconfig")
+    end,
+    config = function()
+      require("devil.plugins.configs.lspconfig")
+    end,
+  },
+
+  {
+    "j-hui/fidget.nvim",
+    opts = {
+      display = {
+        progress_icon = { pattern = "dots", period = 1 },
+      },
+    },
+  },
+
+  {
+    "folke/neodev.nvim",
+    ft = { "lua" },
+    opts = {
+      library = {
+        enabled = true, -- when not enabled, neodev will not change any settings to the LSP server
+        -- these settings will be used for your Neovim config directory
+        runtime = true, -- runtime path
+        types = true, -- full signature, docs and completion of vim.api, vim.treesitter, vim.lsp and others
+        plugins = true, -- installed opt or start plugins in packpath
+        -- you can also specify the list of plugins to make available as a workspace library
+        -- plugins = { "nvim-treesitter", "plenary.nvim", "telescope.nvim" },
+      },
+      setup_jsonls = true, -- configures jsonls to provide completion for project specific .luarc.json files
+      -- for your Neovim config directory, the config.library settings will be used as is
+      -- for plugin directories (root_dirs having a /lua directory), config.library.plugins will be disabled
+      -- for any other directory, config.library.enabled will be set to false
+      override = function(root_dir, options) end,
+      -- With lspconfig, Neodev will automatically setup your lua-language-server
+      -- If you disable this, then you have to set {before_init=require("neodev.lsp").before_init}
+      -- in your lsp start options
+      lspconfig = true,
+      -- much faster, but needs a recent built of lua-language-server
+      -- needs lua-language-server >= 3.6.0
+      pathStrict = true,
+    },
+  },
+
+  {
+    "stevearc/conform.nvim",
+    opts = function()
+      return require("devil.plugins.configs.conform")
+    end,
+  },
+
+  {
+    "onsails/lspkind.nvim",
+    opts = function()
+      return require("devil.plugins.configs.others").lspkind
+    end,
+    config = function(_, opts)
+      require("lspkind").init(opts)
+    end,
+  },
+
+  -- load luasnips + cmp related in insert mode only
+  {
+    "hrsh7th/nvim-cmp",
+    event = "InsertEnter",
+    dependencies = {
+      {
+        -- snippet plugin
+        "L3MON4D3/LuaSnip",
+        dependencies = "rafamadriz/friendly-snippets",
+        opts = { history = true, updateevents = "TextChanged,TextChangedI" },
+        config = function(_, opts)
+          require("devil.plugins.configs.others").luasnip(opts)
+        end,
+      },
+
+      -- autopairing of (){}[] etc
+      {
+        "windwp/nvim-autopairs",
+        opts = {
+          fast_wrap = {},
+          disable_filetype = { "TelescopePrompt", "vim" },
+        },
+        config = function(_, opts)
+          require("nvim-autopairs").setup(opts)
+
+          -- setup cmp for autopairs
+          local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+          require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
+        end,
+      },
+
+      -- cmp sources plugins
+      {
+        "hrsh7th/cmp-nvim-lsp",
+        "hrsh7th/cmp-buffer",
+        "hrsh7th/cmp-calc",
+        "hrsh7th/cmp-cmdline",
+        "hrsh7th/cmp-nvim-lsp-signature-help",
+        "hrsh7th/cmp-nvim-lsp-document-symbol",
+        "hrsh7th/cmp-nvim-lua",
+        "hrsh7th/cmp-emoji",
+        "FelipeLema/cmp-async-path",
+        "saadparwaiz1/cmp_luasnip",
+        "petertriho/cmp-git",
+        "Dosx001/cmp-commit",
+        "ray-x/cmp-treesitter",
+        "David-Kunz/cmp-npm",
+      },
+    },
+    opts = function()
+      return require("devil.plugins.configs.cmp") ---@diagnostic disable-line
+    end,
+    config = function(_, opts)
+      local cmp_plug = require("cmp")
+      cmp_plug.setup(opts)
+
+      ---@diagnostic disable-next-line
+      cmp_plug.setup.cmdline({ "/", "?" }, {
+        mapping = cmp_plug.mapping.preset.cmdline(),
+        sources = {
+          { name = "buffer" },
+        },
+      })
+
+      ---@diagnostic disable-next-line
+      cmp_plug.setup.cmdline("/", {
+        sources = cmp_plug.config.sources({
+          { name = "nvim_lsp_document_symbol" },
+        }, {
+          { name = "buffer" },
+        }),
+      })
+
+      -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+      ---@diagnostic disable-next-line
+      cmp_plug.setup.cmdline(":", {
+        mapping = cmp_plug.mapping.preset.cmdline(),
+        sources = cmp_plug.config.sources({
+          { name = "async_path" },
+        }, {
+          { name = "cmdline" },
+        }),
+      })
+
+      ---@diagnostic disable-next-line
+      cmp_plug.setup.filetype("gitcommit", {
+        sources = cmp_plug.config.sources({
+          -- You can specify the `git` source if [you were installed it](https://github.com/petertriho/cmp-git).
+          { name = "git" },
+        }, {
+          { name = "buffer" },
+        }, {
+          { name = "commit" },
+        }, {
+          { name = "emoji" },
+        }),
+      })
+    end,
+  },
+
+  {
+    "lewis6991/gitsigns.nvim",
+    ft = { "gitcommit", "diff" },
+    init = function()
+      -- load gitsigns only when a git file is opened
+      vim.api.nvim_create_autocmd({ "BufRead" }, {
+        group = vim.api.nvim_create_augroup("GitSignsLazyLoad", { clear = true }),
+        callback = function()
+          vim.fn.jobstart({ "git", "-C", vim.loop.cwd(), "rev-parse" }, {
+            on_exit = function(_, return_code)
+              if return_code == 0 then
+                vim.api.nvim_del_augroup_by_name("GitSignsLazyLoad")
+                vim.schedule(function()
+                  require("lazy").load({ plugins = { "gitsigns.nvim" } })
+                end)
+              end
+            end,
+          })
+        end,
+      })
+    end,
+    opts = function()
+      return require("devil.plugins.configs.others").gitsigns
+    end,
+    config = function(_, opts)
+      require("gitsigns").setup(opts)
+    end,
+  },
+
+  {
     "nvim-neo-tree/neo-tree.nvim",
     branch = "v3.x",
     dependencies = {
@@ -89,7 +310,50 @@ local plugins = {
       return require("devil.plugins.configs.neo-tree")
     end,
     config = function(_, opts)
-      require("neo-tree").setup(opts)
+      require("neo-tree").setup(opts) ---@diagnostic disable-line
+    end,
+  },
+
+  {
+    "nvim-lualine/lualine.nvim",
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+    },
+    opts = function()
+      return require("devil.plugins.configs.lualine")
+    end,
+  },
+
+  -- bufdelete.nvim
+  -- Delete Neovim buffers without losing window layout
+  { "famiu/bufdelete.nvim", lazy = true },
+  -- bufferline.nvim
+  -- A snazzy bufferline for Neovim
+  {
+    "akinsho/bufferline.nvim",
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+      "famiu/bufdelete.nvim",
+    },
+    version = "v4.*",
+    init = function()
+      utils.load_mappings("bufferline")
+    end,
+    opts = function()
+      return require("devil.plugins.configs.bufferline")
+    end,
+  },
+
+  {
+    "rcarriga/nvim-notify",
+    opts = {
+      stages = "slide",
+      timeout = 5000,
+      render = "default",
+    },
+    config = function(_, opts)
+      require("notify").setup(opts)
+      vim.notify = require("notify")
     end,
   },
 

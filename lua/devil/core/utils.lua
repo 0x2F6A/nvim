@@ -87,4 +87,125 @@ function M.lazy_load(plugin)
   })
 end
 
+-- A full icon for lsp label kinds
+M.kind_icons = {
+  Array = "󰅪 ",
+  Boolean = " ",
+  BreakStatement = "󰙧 ",
+  Call = "󰃷 ",
+  CaseStatement = "󱃙 ",
+  Class = " ",
+  Color = "󰏘 ",
+  Constant = "󰏿 ",
+  Constructor = " ",
+  ContinueStatement = "→ ",
+  Copilot = " ",
+  Declaration = "󰙠 ",
+  Delete = "󰩺 ",
+  DoStatement = "󰑖 ",
+  Enum = " ",
+  EnumMember = " ",
+  Event = " ",
+  Field = " ",
+  File = "󰈙 ",
+  Folder = "󰉋 ",
+  ForStatement = "󰑖 ",
+  Function = "󰊕 ",
+  H1Marker = "󰉫 ", -- Used by markdown treesitter parser
+  H2Marker = "󰉬 ",
+  H3Marker = "󰉭 ",
+  H4Marker = "󰉮 ",
+  H5Marker = "󰉯 ",
+  H6Marker = "󰉰 ",
+  Identifier = "󰀫 ",
+  IfStatement = "󰇉 ",
+  Interface = " ",
+  Keyword = "󰌋 ",
+  List = "󰅪 ",
+  Log = "󰦪 ",
+  Lsp = " ",
+  Macro = "󰁌 ",
+  MarkdownH1 = "󰉫 ", -- Used by builtin markdown source
+  MarkdownH2 = "󰉬 ",
+  MarkdownH3 = "󰉭 ",
+  MarkdownH4 = "󰉮 ",
+  MarkdownH5 = "󰉯 ",
+  MarkdownH6 = "󰉰 ",
+  Method = "󰆧 ",
+  Module = "󰏗 ",
+  Namespace = "󰌗 ",
+  Null = "󰢤 ",
+  Number = "󰎠 ",
+  Object = "󰅩 ",
+  Operator = "󰆕 ",
+  Package = "󰆦 ",
+  Pair = "󰅪 ",
+  Property = " ",
+  Reference = "󰦾 ",
+  Regex = " ",
+  Repeat = "󰑖 ",
+  Scope = "󰅩 ",
+  Snippet = "󰩫 ",
+  Specifier = "󰦪 ",
+  Statement = "󰅩 ",
+  String = " ",
+  Text = "󰉿 ",
+  Unit = "󰑭 ",
+  Value = "󰎠 ",
+  Variable = " ",
+  Struct = " ",
+  TypeParameter = "󰊄 ",
+}
+
+local proxy_lsps = {
+  ["null-ls"] = true,
+  ["efm"] = true,
+  ["emmet_ls"] = true,
+  ["eslint"] = true,
+  ["cssmodule_ls"] = true,
+}
+-- Determine whether the obtained LSP is a proxy LSP
+---@param name string
+---@return boolean
+function M.not_proxy_lsp(name)
+  return not proxy_lsps[name]
+end
+
+-- Format getted LSP name
+---@param name string
+---@return string
+local function format_client_name(name)
+  return ("[%s]"):format(name)
+end
+
+local non_proxy_clients = {}
+
+-- Function to get current activated LSP name
+---@return string
+function M.get_lsp_info()
+  local buf_ft = vim.api.nvim_get_option_value("filetype", { scope = "local" })
+
+  local clients = vim.lsp.get_clients()
+  if not clients then
+    non_proxy_clients = {}
+    clients = vim.lsp.get_clients()
+  end
+
+  local cached_client = non_proxy_clients[buf_ft]
+  if cached_client then
+    return format_client_name(cached_client.name)
+  end
+
+  for _, client in ipairs(clients) do
+    if client.config["filetypes"] and vim.tbl_contains(client.config["filetypes"], buf_ft) then
+      if M.not_proxy_lsp(client.name) then
+        non_proxy_clients[buf_ft] = client
+        return format_client_name(client.name)
+      end
+    end
+  end
+
+  return "No Active LSP"
+end
+
 return M

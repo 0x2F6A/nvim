@@ -328,7 +328,7 @@ local options = {
       -- handler = function(file_path)
       handler = function(_)
         --auto close
-        neo_tree.close_all()
+        require("neo-tree").close_all()
       end,
     },
   },
