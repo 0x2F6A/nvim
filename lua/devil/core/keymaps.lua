@@ -22,11 +22,43 @@ M.general = {
     ["<C-k>"] = { "<Up>", "Move up" },
   },
 
-  n = {},
+  n = {
+    ["<Esc>"] = { "<cmd> noh <CR>", "Clear highlights" },
+    -- switch between windows
+    ["<C-h>"] = { "<C-w>h", "Window left" },
+    ["<C-l>"] = { "<C-w>l", "Window right" },
+    ["<C-j>"] = { "<C-w>j", "Window down" },
+    ["<C-k>"] = { "<C-w>k", "Window up" },
+
+    -- line numbers
+    ["<leader>n"] = { "<cmd> set nu! <CR>", "Toggle line number" },
+    ["<leader>rn"] = { "<cmd> set rnu! <CR>", "Toggle relative number" },
+
+    -- Allow moving the cursor through wrapped lines with j, k, <Up> and <Down>
+    -- http://www.reddit.com/r/vim/comments/2k4cbr/problem_with_gj_and_gk/
+    -- empty mode is same as using <cmd> :map
+    -- also don't use g[j|k] when in operator pending mode, so it doesn't alter d, y or c behaviour
+    ["j"] = { 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', "Move down", opts = { expr = true } },
+    ["k"] = { 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', "Move up", opts = { expr = true } },
+    ["<Up>"] = { 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', "Move up", opts = { expr = true } },
+    ["<Down>"] = { 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', "Move down", opts = { expr = true } },
+
+    ["<leader>fm"] = {
+      function()
+        vim.lsp.buf.format({ async = true })
+      end,
+      "LSP formatting",
+    },
+  },
 
   t = {},
 
-  v = {},
+  v = {
+    ["<Up>"] = { 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', "Move up", opts = { expr = true } },
+    ["<Down>"] = { 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', "Move down", opts = { expr = true } },
+    ["<"] = { "<gv", "Indent line" },
+    [">"] = { ">gv", "Indent line" },
+  },
 
   x = {},
 }
@@ -181,7 +213,16 @@ M.lspconfig = {
   },
 }
 
-M.neo_tree = {}
+M.neo_tree = {
+  n = {
+    ["<A-m>"] = {
+      "<cmd> Neotree toggle <CR>",
+      "Toggle neotree",
+    },
+  },
+}
+
+M.bufferline = {}
 
 M.telescope = {
   plugin = true,
@@ -214,7 +255,25 @@ M.telescope = {
   },
 }
 
-M.which_key = {}
+M.whichkey = {
+  plugin = true,
+
+  n = {
+    ["<leader>wK"] = {
+      function()
+        vim.cmd("WhichKey")
+      end,
+      "Which-key all keymaps",
+    },
+    ["<leader>wk"] = {
+      function()
+        local input = vim.fn.input("WhichKey: ")
+        vim.cmd("WhichKey " .. input)
+      end,
+      "Which-key query lookup",
+    },
+  },
+}
 
 M.blankline = {
   plugin = true,
@@ -222,6 +281,66 @@ M.blankline = {
 
 M.gitsigns = {
   plugin = true,
+
+  n = {
+    -- Navigation through hunks
+    ["]c"] = {
+      function()
+        if vim.wo.diff then
+          return "]c"
+        end
+        vim.schedule(function()
+          require("gitsigns").next_hunk()
+        end)
+        return "<Ignore>"
+      end,
+      "Jump to next hunk",
+      opts = { expr = true },
+    },
+
+    ["[c"] = {
+      function()
+        if vim.wo.diff then
+          return "[c"
+        end
+        vim.schedule(function()
+          require("gitsigns").prev_hunk()
+        end)
+        return "<Ignore>"
+      end,
+      "Jump to prev hunk",
+      opts = { expr = true },
+    },
+
+    -- Actions
+    ["<leader>rh"] = {
+      function()
+        require("gitsigns").reset_hunk()
+      end,
+      "Reset hunk",
+    },
+
+    ["<leader>ph"] = {
+      function()
+        require("gitsigns").preview_hunk()
+      end,
+      "Preview hunk",
+    },
+
+    ["<leader>gb"] = {
+      function()
+        package.loaded.gitsigns.blame_line()
+      end,
+      "Blame line",
+    },
+
+    ["<leader>td"] = {
+      function()
+        require("gitsigns").toggle_deleted()
+      end,
+      "Toggle deleted",
+    },
+  },
 }
 
 return M

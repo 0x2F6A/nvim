@@ -74,6 +74,26 @@ local plugins = {
   },
 
   {
+    "nvim-neo-tree/neo-tree.nvim",
+    branch = "v3.x",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-tree/nvim-web-devicons",
+      "MunifTanjim/nui.nvim",
+    },
+    cmd = "Neotree",
+    init = function()
+      utils.load_mappings("neo_tree")
+    end,
+    opts = function()
+      return require("devil.plugins.configs.neo-tree")
+    end,
+    config = function(_, opts)
+      require("neo-tree").setup(opts)
+    end,
+  },
+
+  {
     "numToStr/Comment.nvim",
     keys = {
       { "gcc", mode = "n", desc = "Comment toggle current line" },
