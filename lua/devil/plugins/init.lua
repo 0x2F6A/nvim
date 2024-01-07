@@ -69,18 +69,18 @@ local plugins = {
   {
     "williamboman/mason.nvim",
     event = "LSPAttach",
-    dependencies = {
-      {
-        "williamboman/mason-lspconfig.nvim",
-        opts = {
-          automatic_installation = false,
-          ensure_installed = { "clangd", "gopls", "lua_ls", "rust_analyzer", "tsserver", "zls" },
-        },
-      },
-    },
+    dependencies = { "williamboman/mason-lspconfig.nvim" },
     cmd = { "Mason", "MasonInstall", "MasonInstallAll", "MasonUpdate" },
     opts = function()
       return require("devil.plugins.configs.mason")
+    end,
+    config = function(_, opts)
+      require("mason").setup(opts)
+
+      require("mason-lspconfig").setup({
+        automatic_installation = false,
+        ensure_installed = { "clangd", "gopls", "lua_ls", "rust_analyzer", "tsserver", "zls" },
+      })
     end,
   },
 
