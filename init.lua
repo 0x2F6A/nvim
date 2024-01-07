@@ -9,4 +9,5 @@ utils.load_mappings()
 
 require("devil.plugins")
 
+require("devil.core.commands")
 require("devil.core.colorscheme")

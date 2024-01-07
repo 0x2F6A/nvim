@@ -56,6 +56,22 @@ local runtime_path = vim.split(package.path, ";", {})
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/>/init.lua")
 
+local noconfig_servers = {
+  "cssls",
+  "emmet_language_server",
+  "eslint",
+  "html",
+  "svelte",
+  "volar",
+}
+
+for _, server in pairs(noconfig_servers) do
+  lspconfig[server].setup({
+    on_attach = M.on_attach,
+    capabilities = M.capabilities,
+  })
+end
+
 require("neodev").setup()
 lspconfig.lua_ls.setup({
   on_attach = M.on_attach,
@@ -251,6 +267,38 @@ lspconfig.zls.setup({
       global_cache_path = nil,
       build_runner_global_cache_path = nil,
       completions_with_replace = true,
+    },
+  },
+})
+
+lspconfig.tsserver.setup({
+  on_attach = M.on_attach,
+  capabilities = M.capabilities,
+
+  settings = {
+    typescript = {
+      inlayHints = {
+        includeInlayParameterNameHints = "all",
+        includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+        includeInlayFunctionParameterTypeHints = true,
+        includeInlayVariableTypeHints = true,
+        includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+        includeInlayPropertyDeclarationTypeHints = true,
+        includeInlayFunctionLikeReturnTypeHints = true,
+        includeInlayEnumMemberValueHints = true,
+      },
+    },
+    javascript = {
+      inlayHints = {
+        includeInlayParameterNameHints = "all",
+        includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+        includeInlayFunctionParameterTypeHints = true,
+        includeInlayVariableTypeHints = true,
+        includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+        includeInlayPropertyDeclarationTypeHints = true,
+        includeInlayFunctionLikeReturnTypeHints = true,
+        includeInlayEnumMemberValueHints = true,
+      },
     },
   },
 })
