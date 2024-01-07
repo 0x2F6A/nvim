@@ -68,25 +68,19 @@ local plugins = {
 
   {
     "williamboman/mason.nvim",
+    event = "LSPAttach",
     dependencies = {
       {
         "williamboman/mason-lspconfig.nvim",
         opts = {
           automatic_installation = false,
+          ensure_installed = { "clangd", "gopls", "lua_ls", "rust_analyzer", "tsserver", "zls" },
         },
       },
     },
     cmd = { "Mason", "MasonInstall", "MasonInstallAll", "MasonUpdate" },
     opts = function()
       return require("devil.plugins.configs.mason")
-    end,
-    config = function(_, opts)
-      -- custom nvchad cmd to install all mason binaries listed
-      vim.api.nvim_create_user_command("MasonInstallAll", function()
-        if opts.ensure_installed and #opts.ensure_installed > 0 then
-          vim.cmd("MasonInstall " .. table.concat(opts.ensure_installed, " "))
-        end
-      end, {})
     end,
   },
 
@@ -282,6 +276,7 @@ local plugins = {
 
   {
     "nvim-neo-tree/neo-tree.nvim",
+    lazy = false,
     branch = "v3.x",
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -299,6 +294,7 @@ local plugins = {
 
   {
     "nvim-lualine/lualine.nvim",
+    lazy = false,
     dependencies = {
       "nvim-tree/nvim-web-devicons",
     },
@@ -314,6 +310,7 @@ local plugins = {
   -- A snazzy bufferline for Neovim
   {
     "akinsho/bufferline.nvim",
+    lazy = false,
     dependencies = {
       "nvim-tree/nvim-web-devicons",
       "famiu/bufdelete.nvim",
