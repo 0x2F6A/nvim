@@ -160,6 +160,7 @@ M.kind_icons = {
 local proxy_lsps = {
   ["null-ls"] = true,
   ["efm"] = true,
+  ["emmet_language_server"] = true,
   ["emmet_ls"] = true,
   ["eslint"] = true,
   ["cssmodule_ls"] = true,
