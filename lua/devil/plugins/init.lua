@@ -31,21 +31,17 @@ local plugins = {
         },
       }
     end,
-    config = function(_, opts)
-      require("nvim-web-devicons").setup(opts)
-    end,
   },
 
   {
     "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    event = "UIEnter",
     init = function()
       utils.lazy_load("indent-blankline.nvim")
     end,
     opts = function()
       return require("devil.plugins.configs.others").blankline
-    end,
-    config = function(_, opts)
-      require("ibl").setup(opts)
     end,
   },
 
@@ -68,9 +64,6 @@ local plugins = {
     opts = function()
       return require("devil.plugins.configs.treesitter")
     end,
-    config = function(_, opts)
-      require("nvim-treesitter.configs").setup(opts)
-    end,
   },
 
   {
@@ -88,16 +81,12 @@ local plugins = {
       return require("devil.plugins.configs.mason")
     end,
     config = function(_, opts)
-      require("mason").setup(opts)
-
       -- custom nvchad cmd to install all mason binaries listed
       vim.api.nvim_create_user_command("MasonInstallAll", function()
         if opts.ensure_installed and #opts.ensure_installed > 0 then
           vim.cmd("MasonInstall " .. table.concat(opts.ensure_installed, " "))
         end
       end, {})
-
-      vim.g.mason_binaries_list = opts.ensure_installed
     end,
   },
 
@@ -137,7 +126,7 @@ local plugins = {
       -- for your Neovim config directory, the config.library settings will be used as is
       -- for plugin directories (root_dirs having a /lua directory), config.library.plugins will be disabled
       -- for any other directory, config.library.enabled will be set to false
-      override = function(root_dir, options) end,
+      override = function(root_dir, options) end, ---@diagnostic disable-line
       -- With lspconfig, Neodev will automatically setup your lua-language-server
       -- If you disable this, then you have to set {before_init=require("neodev.lsp").before_init}
       -- in your lsp start options
@@ -273,7 +262,7 @@ local plugins = {
       vim.api.nvim_create_autocmd({ "BufRead" }, {
         group = vim.api.nvim_create_augroup("GitSignsLazyLoad", { clear = true }),
         callback = function()
-          vim.fn.jobstart({ "git", "-C", vim.loop.cwd(), "rev-parse" }, {
+          vim.fn.jobstart({ "git", "-C", vim.loop["cwd"](), "rev-parse" }, {
             on_exit = function(_, return_code)
               if return_code == 0 then
                 vim.api.nvim_del_augroup_by_name("GitSignsLazyLoad")
@@ -288,9 +277,6 @@ local plugins = {
     end,
     opts = function()
       return require("devil.plugins.configs.others").gitsigns
-    end,
-    config = function(_, opts)
-      require("gitsigns").setup(opts)
     end,
   },
 
@@ -308,9 +294,6 @@ local plugins = {
     end,
     opts = function()
       return require("devil.plugins.configs.neo-tree")
-    end,
-    config = function(_, opts)
-      require("neo-tree").setup(opts) ---@diagnostic disable-line
     end,
   },
 
@@ -370,9 +353,18 @@ local plugins = {
     init = function()
       utils.load_mappings("comment")
     end,
-    config = function(_, opts)
-      require("Comment").setup(opts)
-    end,
+  },
+
+  {
+    "folke/todo-comments.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {},
+  },
+
+  {
+    "folke/trouble.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = {},
   },
 
   {
@@ -395,7 +387,7 @@ local plugins = {
       return require("devil.plugins.configs.telescope")
     end,
     config = function(_, opts)
-      local telescope = require("telescope")
+      local telescope = require("telescope") ---@diagnostic disable-line
       telescope.setup(opts)
 
       -- load extensions
@@ -425,12 +417,9 @@ local plugins = {
       utils.load_mappings("whichkey")
     end,
     cmd = "WhichKey",
-    config = function(_, opts)
-      require("which-key").setup(opts)
-    end,
   },
 }
 
-local lazy_opts = require("devil.plugins.configs.lazy")
+local lazy_opts = require("devil.plugins.configs.lazy") ---@diagnostic disable-line
 
 lazy.setup(plugins, lazy_opts)
