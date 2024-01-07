@@ -68,6 +68,7 @@ local plugins = {
 
   {
     "williamboman/mason.nvim",
+    lazy = false,
     event = "LSPAttach",
     dependencies = { "williamboman/mason-lspconfig.nvim" },
     cmd = { "Mason", "MasonInstall", "MasonInstallAll", "MasonUpdate" },
@@ -86,6 +87,7 @@ local plugins = {
 
   {
     "neovim/nvim-lspconfig",
+    lazy = false,
     init = function()
       require("devil.core.utils").lazy_load("nvim-lspconfig")
     end,
