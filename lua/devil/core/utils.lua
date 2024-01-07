@@ -164,6 +164,8 @@ local proxy_lsps = {
   ["emmet_ls"] = true,
   ["eslint"] = true,
   ["cssmodule_ls"] = true,
+  ["golangci_lint_ls"] = true,
+  ["ruff_lsp"] = true,
 }
 -- Determine whether the obtained LSP is a proxy LSP
 ---@param name string
