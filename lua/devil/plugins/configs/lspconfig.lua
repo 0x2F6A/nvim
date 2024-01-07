@@ -303,4 +303,37 @@ lspconfig.tsserver.setup({
   },
 })
 
+lspconfig.jsonls.setup({
+  on_attach = M.on_attach,
+  capabilities = M.capabilities,
+
+  settings = {
+    json = {
+      schemas = require("schemastore").json.schemas({
+        ignore = {},
+      }),
+      validate = { enable = true },
+      format = { enable = true },
+    },
+  },
+})
+
+lspconfig.yamlls.setup({
+  on_attach = M.on_attach,
+  capabilities = M.capabilities,
+
+  settings = {
+    yaml = {
+      schemaStore = {
+        -- You must disable built-in schemaStore support if you want to use
+        -- this plugin and its advanced options like `ignore`.
+        enable = false,
+        -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
+        url = "",
+      },
+      schemas = require("schemastore").yaml.schemas(),
+    },
+  },
+})
+
 return

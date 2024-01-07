@@ -131,6 +131,8 @@ local plugins = {
     },
   },
 
+  { "b0o/schemastore.nvim", event = "LSPAttach" },
+
   {
     "stevearc/conform.nvim",
     opts = function()
