@@ -143,6 +143,13 @@ local plugins = {
   },
 
   {
+    "mfussenegger/nvim-lint",
+    config = function(_, opts)
+      require("devil.plugins.configs.lint")
+    end,
+  },
+
+  {
     "onsails/lspkind.nvim",
     opts = function()
       return require("devil.plugins.configs.others").lspkind
