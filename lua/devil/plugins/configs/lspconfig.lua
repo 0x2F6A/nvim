@@ -2,6 +2,7 @@ local M = {}
 local utils = require("devil.core.utils")
 local lspconfig = require("lspconfig")
 
+local merge_tb = vim.tbl_deep_extend
 local inlay_hint = vim.lsp.inlay_hint
 
 function M.set_inlay_hints(client, bufnr)
@@ -52,9 +53,12 @@ M.capabilities.textDocument.completion.completionItem = {
   },
 }
 
-local runtime_path = vim.split(package.path, ";", {})
-table.insert(runtime_path, "lua/?.lua")
-table.insert(runtime_path, "lua/>/init.lua")
+local default_config = function()
+  return {
+    on_attach = M.on_attach,
+    capabilities = M.capabilities,
+  }
+end
 
 local noconfig_servers = {
   "cssls",
@@ -63,20 +67,19 @@ local noconfig_servers = {
   "html",
   "svelte",
   "volar",
+  "vimls",
 }
 
 for _, server in pairs(noconfig_servers) do
-  lspconfig[server].setup({
-    on_attach = M.on_attach,
-    capabilities = M.capabilities,
-  })
+  lspconfig[server].setup(default_config())
 end
 
-require("neodev").setup()
-lspconfig.lua_ls.setup({
-  on_attach = M.on_attach,
-  capabilities = M.capabilities,
+local runtime_path = vim.split(package.path, ";", {})
+table.insert(runtime_path, "lua/?.lua")
+table.insert(runtime_path, "lua/>/init.lua")
 
+require("neodev").setup()
+lspconfig.lua_ls.setup(merge_tb("force", default_config(), {
   settings = {
     Lua = {
       runtime = {
@@ -106,34 +109,28 @@ lspconfig.lua_ls.setup({
       },
     },
   },
+}))
+
+local clangd_capabilities = M.capabilities
+clangd_capabilities.offsetEncoding = { "utf-16" } ---@diagnostic disable-line
+lspconfig.clangd.setup({
+  on_attach = M.on_attach,
+  capabilities = clangd_capabilities,
+
+  settings = {
+    clangd = {
+      InlayHints = {
+        Designators = true,
+        Enabled = true,
+        ParameterNames = true,
+        DeducedTypes = true,
+      },
+      fallbackFlags = { "-std=c++20" },
+    },
+  },
 })
 
-lspconfig.clangd.setup((function()
-  local capabilities = vim.lsp.protocol.make_client_capabilities()
-  capabilities.offsetEncoding = { "utf-16" } ---@diagnostic disable-line
-
-  return {
-    on_attach = M.on_attach,
-    capabilities = capabilities,
-
-    settings = {
-      clangd = {
-        InlayHints = {
-          Designators = true,
-          Enabled = true,
-          ParameterNames = true,
-          DeducedTypes = true,
-        },
-        fallbackFlags = { "-std=c++20" },
-      },
-    },
-  }
-end)())
-
-lspconfig.gopls.setup({
-  on_attach = M.on_attach,
-  capabilities = M.capabilities,
-
+lspconfig.gopls.setup(merge_tb("force", default_config(), {
   settings = {
     gopls = {
       experimentalPostfixCompletions = true,
@@ -172,12 +169,9 @@ lspconfig.gopls.setup({
       semanticTokens = true,
     },
   },
-})
+}))
 
-lspconfig.rust_analyzer.setup({
-  on_attach = M.on_attach,
-  capabilities = M.capabilities,
-
+lspconfig.rust_analyzer.setup(merge_tb("force", default_config(), {
   settings = {
     rust_analyzer = {
       checkOnSave = {
@@ -231,12 +225,9 @@ lspconfig.rust_analyzer.setup({
       },
     },
   },
-})
+}))
 
-lspconfig.zls.setup({
-  on_attach = M.on_attach,
-  capabilities = M.capabilities,
-
+lspconfig.zls.setup(merge_tb("force", default_config(), {
   settings = {
     zls = {
       enable_snippets = true,
@@ -269,12 +260,9 @@ lspconfig.zls.setup({
       completions_with_replace = true,
     },
   },
-})
+}))
 
-lspconfig.tsserver.setup({
-  on_attach = M.on_attach,
-  capabilities = M.capabilities,
-
+lspconfig.tsserver.setup(merge_tb("force", default_config(), {
   settings = {
     typescript = {
       inlayHints = {
@@ -301,12 +289,9 @@ lspconfig.tsserver.setup({
       },
     },
   },
-})
+}))
 
-lspconfig.jsonls.setup({
-  on_attach = M.on_attach,
-  capabilities = M.capabilities,
-
+lspconfig.jsonls.setup(merge_tb("force", default_config(), {
   settings = {
     json = {
       schemas = require("schemastore").json.schemas({
@@ -316,12 +301,9 @@ lspconfig.jsonls.setup({
       format = { enable = true },
     },
   },
-})
+}))
 
-lspconfig.yamlls.setup({
-  on_attach = M.on_attach,
-  capabilities = M.capabilities,
-
+lspconfig.yamlls.setup(merge_tb("force", default_config(), {
   settings = {
     yaml = {
       schemaStore = {
@@ -334,6 +316,6 @@ lspconfig.yamlls.setup({
       schemas = require("schemastore").yaml.schemas(),
     },
   },
-})
+}))
 
 return
