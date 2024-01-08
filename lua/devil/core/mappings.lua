@@ -49,6 +49,32 @@ M.general = {
       end,
       "LSP formatting",
     },
+
+    ["<leader>w"] = { ":w<CR>", "Save" },
+    ["<leader>q"] = { ":q<CR>", "Quit" },
+    ["<leader>wq"] = { ":wq<CR>", "Write and quit" },
+
+    -- s_windows
+    ["sv"] = { ":vsp<CR>", "Split window vertically" },
+    ["sh"] = { ":sp<CR>", "Split window horizontally" },
+    ["sc"] = { "<C-w>c", "Close picked split window" },
+    ["so"] = { "<C-w>o", "Close other split window" },
+    ["s,"] = { ":vertical resize -10<CR>", "Reduce vertical window size" },
+    ["s."] = { ":vertical resize +10<CR>", "Increase vertical window size" },
+    ["sj"] = { ":horizontal resize -5<CR>", "Reduce horizontal window size" },
+    ["sk"] = { ":horizontal resize +5<CR>", "Increase vertical window size" },
+    ["s="] = { "<C-w>=", "Make split windows equal in size" },
+
+    -- tabs
+    ["ts"] = { "<cmd>tab split<CR>", "Split window use tab" },
+    ["th"] = { "<cmd>tabprev<CR>", "Switch to previous tab" },
+    ["tj"] = { "<cmd>tabnext<CR>", "Switch to next tab" },
+    ["tf"] = { "<cmd>tabfirst<CR>", "Switch to first tab" },
+    ["tl"] = { "<cmd>tablast<CR>", "Switch to last tab" },
+    ["tc"] = { "<cmd>tabclose<CR>", "Close tab" },
+
+    ["zo"] = { "<CMD>foldopen<CR>", "Open fold" },
+    ["zc"] = { "<CMD>foldclose<CR>", "Close fold" },
   },
 
   t = {},
