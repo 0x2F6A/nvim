@@ -20,7 +20,7 @@ function M.set_inlay_hints(client, bufnr)
   end
 end
 
-M.on_attach = function(client, bufnr)
+function M.on_attach(client, bufnr)
   client.server_capabilities.documentFormattingProvider = false
   client.server_capabilities.documentRangeFormattingProvider = false
 
