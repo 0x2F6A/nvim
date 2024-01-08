@@ -125,7 +125,7 @@ M.lspconfig = {
 
     ["gd"] = {
       function()
-        vim.lsp.buf.definition()
+        require("telescope.builtin").lsp_definitions(require("telescope.themes").get_cursor())
       end,
       "LSP definition",
     },
@@ -139,7 +139,7 @@ M.lspconfig = {
 
     ["gi"] = {
       function()
-        vim.lsp.buf.implementation()
+        require("telescope.builtin").lsp_implementations(require("telescope.themes").get_cursor())
       end,
       "LSP implementation",
     },
@@ -153,16 +153,9 @@ M.lspconfig = {
 
     ["<leader>D"] = {
       function()
-        vim.lsp.buf.type_definition()
+        require("telescope.builtin").lsp_type_definitions(require("telescope.themes").get_cursor())
       end,
       "LSP definition type",
-    },
-
-    ["<leader>ra"] = {
-      function()
-        require("nvchad.renamer").open()
-      end,
-      "LSP rename",
     },
 
     ["<leader>ca"] = {
@@ -174,7 +167,7 @@ M.lspconfig = {
 
     ["gr"] = {
       function()
-        vim.lsp.buf.references()
+        require("telescope.builtin").lsp_references(require("telescope.themes").get_cursor())
       end,
       "LSP references",
     },
