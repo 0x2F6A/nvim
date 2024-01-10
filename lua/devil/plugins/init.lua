@@ -6,7 +6,7 @@ end
 
 local utils = require("devil.core.utils")
 
-local plugins = {
+local plugins_list = {
   "nvim-lua/plenary.nvim",
   "folke/lazy.nvim",
 
@@ -350,10 +350,37 @@ local plugins = {
 
   {
     "goolord/alpha-nvim",
-    event = "VIMEnter",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    config = function()
-      require("devil.plugins.configs.alpha")
+    lazy = true,
+    event = "VimEnter",
+    opts = function()
+      return require("devil.plugins.configs.alpha")
+    end,
+    config = function(_, dashboard)
+      -- close Lazy and re-open when the dashboard is ready
+      if vim.o.filetype == "lazy" then
+        vim.cmd.close()
+        vim.api.nvim_create_autocmd("User", {
+          pattern = "AlphaReady",
+          callback = function()
+            require("lazy").show()
+          end,
+        })
+      end
+
+      require("alpha").setup(dashboard.opts)
+
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "LazyVimStarted",
+        callback = function()
+          local stats = require("lazy").stats()
+          local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+          local version = "  󰥱 v" .. vim.version().major .. "." .. vim.version().minor .. "." .. vim.version().patch
+          local plugins = "⚡Neovim loaded " .. stats.count .. " plugins in " .. ms .. "ms"
+          local footer = version .. "\t" .. plugins .. "\n"
+          dashboard.section.footer.val = footer
+          pcall(vim.cmd.AlphaRedraw)
+        end,
+      })
     end,
   },
 
@@ -440,4 +467,4 @@ local plugins = {
 
 local lazy_opts = require("devil.plugins.configs.lazy") ---@diagnostic disable-line
 
-lazy.setup(plugins, lazy_opts)
+lazy.setup(plugins_list, lazy_opts)

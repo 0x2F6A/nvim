@@ -1,171 +1,62 @@
----@return table
-local function layout()
-  ---@param sc string
-  ---@param txt string
-  ---@param keybind string?
-  ---@param keybind_opts table?
-  ---@param opts table?
-  ---@return table
-  local function button(sc, txt, keybind, keybind_opts, opts)
-    local def_opts = {
-      cursor = 3,
-      align_shortcut = "right",
-      hl_shortcut = "AlphaButtonShortcut",
-      hl = "AlphaButton",
-      width = 35,
-      position = "center",
-    }
-    opts = opts and vim.tbl_extend("force", def_opts, opts) or def_opts
-    opts.shortcut = sc
-    local sc_ = sc:gsub("%s", ""):gsub("SPC", "<Leader>")
-    local on_press = function()
-      local key = vim.api.nvim_replace_termcodes(keybind or sc_ .. "<Ignore>", true, false, true)
-      vim.api.nvim_feedkeys(key, "t", false)
-    end
-    if keybind then
-      keybind_opts = vim.F.if_nil(keybind_opts, { noremap = true, silent = true, nowait = true })
-      opts.keymap = { "n", sc_, keybind, keybind_opts }
-    end
-    return { type = "button", val = txt, on_press = on_press, opts = opts }
-  end
+local dashboard = require("alpha.themes.dashboard")
+local logo = [[
 
-  -- https://github.com/goolord/alpha-nvim/issues/105
-  local lazycache = setmetatable({}, {
-    __newindex = function(table, index, fn)
-      assert(type(fn) == "function")
-      getmetatable(table)[index] = fn
-    end,
-    __call = function(table, index)
-      return function()
-        return table[index]
-      end
-    end,
-    __index = function(table, index)
-      local fn = getmetatable(table)[index]
-      if fn then
-        local value = fn()
-        rawset(table, index, value)
-        return value
-      end
-    end,
-  })
+   ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
+   ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
+   ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║
+   ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
+   ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
+   ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝
 
-  ---@return string
-  lazycache.info = function()
-    local plugins = #vim.tbl_keys(require("lazy").plugins())
-    local v = vim.version()
-    local datetime = os.date(" %d-%m-%Y   %H:%M:%S")
-    local platform = vim.fn.has("win32") == 1 and "" or ""
-    return string.format("󰂖 %d  %s %d.%d.%d  %s", plugins, platform, v.major, v.minor, v.patch, datetime)
-  end
+    ]]
 
-  ---@return table
-  lazycache.menu = function()
-    return {
-      button("SPC f o", "󰈢  Recently opened files"),
-      button("SPC f f", "  Find file"),
-      button("SPC f w", "  Find word"),
-      button("SPC f e", "  File browser"),
-      -- button("SPC t 1", "  Find repo"),
-      -- button("SPC t s", "  Open session"),
-      button("n", "  New file", "<Cmd>ene<CR>"),
-      button("p", "󰂖  Plugins", "<Cmd>Lazy<CR>"),
-      button("q", "󰅚  Quit", "<Cmd>qa<CR>"),
-    }
-  end
-
-  ---@return table
-  lazycache.mru = function()
-    local result = {}
-    for _, filename in ipairs(vim.v.oldfiles) do
-      if vim.loop.fs_stat(filename) ~= nil then
-        local icon, hl = require("nvim-web-devicons").get_icon(filename, vim.fn.fnamemodify(filename, ":e"))
-        local filename_short = string.sub(vim.fn.fnamemodify(filename, ":t") or "", 1, 30)
-        table.insert(
-          result,
-          button(
-            tostring(#result + 1),
-            string.format("%s  %s", icon, filename_short),
-            string.format("<Cmd>e %s<CR>", filename),
-            nil,
-            { hl = { { hl, 0, 3 }, { "Normal", 5, #filename_short + 5 } } }
-          )
-        )
-        if #result == 9 then
-          break
-        end
-      end
-    end
-    return result
-  end
-
-  ---@return table
-  lazycache.fortune = function()
-    return require("alpha.fortune")()
-  end
-
-  math.randomseed(os.time())
-  local header_color = "AlphaCol" .. math.random(11)
-
-  return {
-    { type = "padding", val = 1 },
-    {
-      type = "text",
-      val = {
-        [[╔═ ╔═╝╔═║║ ║╝╔╔ ]],
-        [[║ ║╔═╝║ ║║ ║║║║║]],
-        [[╝ ╝══╝══╝ ╝ ╝╝╝╝]],
-      },
-      opts = { hl = header_color, position = "center" },
-    },
-    { type = "padding", val = 1 },
-    {
-      type = "text",
-      val = lazycache("info"),
-      opts = { hl = header_color, position = "center" },
-    },
-    { type = "padding", val = 2 },
-    {
-      type = "group",
-      val = lazycache("menu"),
-      opts = { spacing = 0 },
-    },
-    { type = "padding", val = 1 },
-    {
-      type = "group",
-      val = lazycache("mru"),
-      opts = { spacing = 0 },
-    },
-    { type = "padding", val = 1 },
-    {
-      type = "text",
-      val = lazycache("fortune"),
-      opts = { hl = "AlphaQuote", position = "center" },
-    },
+local function getGreeting(name)
+  local tableTime = os.date("*t")
+  local datetime = os.date(" %Y-%m-%d   %H:%M:%S")
+  local hour = tableTime.hour
+  local greetingsTable = {
+    [1] = "  Sleep well",
+    [2] = "  Good morning",
+    [3] = "  Good afternoon",
+    [4] = "  Good evening",
+    [5] = "󰖔  Good night",
   }
+  local greetingIndex = 0
+  if hour == 23 or hour < 7 then
+    greetingIndex = 1
+  elseif hour < 12 then
+    greetingIndex = 2
+  elseif hour >= 12 and hour < 18 then
+    greetingIndex = 3
+  elseif hour >= 18 and hour < 21 then
+    greetingIndex = 4
+  elseif hour >= 21 then
+    greetingIndex = 5
+  end
+  return "\t\t\t" .. datetime .. "\t" .. greetingsTable[greetingIndex] .. ", " .. name
 end
 
-require("alpha").setup({
-  layout = layout(),
-  opts = {
-    setup = function()
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "AlphaReady",
-        desc = "Disable status and tabline for alpha",
-        callback = function()
-          vim.go.laststatus = 0
-          vim.opt.showtabline = 0
-        end,
-      })
-      vim.api.nvim_create_autocmd("BufUnload", {
-        buffer = 0,
-        desc = "Enable status and tabline after alpha",
-        callback = function()
-          vim.go.laststatus = 3
-          vim.opt.showtabline = 2
-        end,
-      })
-    end,
-    margin = 5,
-  },
-})
+local userName = vim.fn.getenv("USER")
+local greeting = getGreeting(userName)
+dashboard.section.header.val = vim.split(logo .. "\n" .. greeting, "\n")
+dashboard.section.buttons.val = {
+  dashboard.button("n", " " .. " New file", ":ene <BAR> startinsert <CR>"),
+  dashboard.button("f", " " .. " Find file", ":Telescope find_files <CR>"),
+  dashboard.button("g", "󰷾 " .. " Find text", ":Telescope live_grep <CR>"),
+  dashboard.button("b", " " .. " File browser", ":Joshuto <CR>"),
+  dashboard.button("r", "󰄉 " .. " Recent files", ":Telescope oldfiles <CR>"),
+  dashboard.button("c", " " .. " Config", ":e $MYVIMRC <CR>"),
+  dashboard.button("l", "󰒲 " .. " Lazy", ":Lazy<CR>"),
+  dashboard.button("q", " " .. " Quit", ":qa<CR>"),
+}
+
+-- set highlight
+for _, button in ipairs(dashboard.section.buttons.val) do
+  button.opts.hl = "AlphaButtons"
+  button.opts.hl_shortcut = "AlphaShortcut"
+end
+dashboard.section.header.opts.hl = "AlphaHeader"
+dashboard.section.buttons.opts.hl = "AlphaButtons"
+dashboard.section.footer.opts.hl = "AlphaFooter"
+dashboard.opts.layout[1].val = 8
+return dashboard
