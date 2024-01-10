@@ -18,7 +18,13 @@ local options = {
     lua = { "stylua" },
     perl = { "perlimports", "perltidy" },
     php = { "php_cs_fixer" },
-    python = { "isort", "black" },
+    python = function(bufnr)
+      if require("conform").get_formatter_info("ruff_format", bufnr).available then
+        return { "ruff_format" }
+      else
+        return { "isort", "black" }
+      end
+    end,
     ruby = { "standardrb" },
     rust = { "rustfmt" },
     scala = { "scalafmt" },
@@ -54,11 +60,7 @@ local options = {
   -- Define custom formatters here
   formatters = {
     prettier = {
-      command = require("conform.util").find_executable({ "node_modules/.bin/prettier" }, "prettier"),
-      args = { "--no-semi" },
-      stdin = true,
-      cwd = require("conform.util").root_file({ ".editorconfig", "package.json" }),
-      require_cwd = true,
+      prepend_args = { "--no-semi" },
     },
   },
 }
