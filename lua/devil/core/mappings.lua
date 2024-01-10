@@ -262,6 +262,7 @@ M.telescope = {
     ["<leader>fo"] = { "<cmd> Telescope oldfiles <CR>", "Find oldfiles" },
     ["<leader>fz"] = { "<cmd> Telescope current_buffer_fuzzy_find <CR>", "Find in current buffer" },
     ["<leader>fp"] = { "<cmd> Telescope project <CR>", "Find recently projects" },
+    ["<leader>fe"] = { "<cmd> Telescope file_browser <CR>", "Open file browser" },
 
     -- git
     ["<leader>cm"] = { "<cmd> Telescope git_commits <CR>", "Git commits" },

@@ -33,10 +33,8 @@ local options = {
     prompt_prefix = "   ",
     selection_caret = "  ",
     entry_prefix = "  ",
-    initial_mode = "insert",
     selection_strategy = "reset",
     sorting_strategy = "ascending",
-    layout_strategy = "horizontal",
     layout_config = {
       horizontal = {
         prompt_position = "top",
@@ -79,7 +77,7 @@ local options = {
   extensions = {
     file_browser = {
       -- disables netrw and use telescope-file-browser in its place
-      hijack_netrw = true,
+      hijack_netrw = false,
       mappings = {
         ["i"] = {
           -- your custom insert mode mappings

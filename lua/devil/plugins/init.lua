@@ -122,7 +122,7 @@ local plugins = {
       -- for your Neovim config directory, the config.library settings will be used as is
       -- for plugin directories (root_dirs having a /lua directory), config.library.plugins will be disabled
       -- for any other directory, config.library.enabled will be set to false
-      override = function(root_dir, options) end, ---@diagnostic disable-line
+      -- override = function(root_dir, options) end,
       -- With lspconfig, Neodev will automatically setup your lua-language-server
       -- If you disable this, then you have to set {before_init=require("neodev.lsp").before_init}
       -- in your lsp start options
@@ -144,7 +144,7 @@ local plugins = {
 
   {
     "mfussenegger/nvim-lint",
-    config = function(_, opts)
+    config = function()
       require("devil.plugins.configs.lint")
     end,
   },
@@ -345,6 +345,15 @@ local plugins = {
     config = function(_, opts)
       require("notify").setup(opts)
       vim.notify = require("notify")
+    end,
+  },
+
+  {
+    "goolord/alpha-nvim",
+    event = "VIMEnter",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("devil.plugins.configs.alpha")
     end,
   },
 
