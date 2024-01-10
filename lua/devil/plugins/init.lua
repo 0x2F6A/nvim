@@ -453,6 +453,14 @@ local plugins_list = {
       { "nvim-telescope/telescope-fzy-native.nvim" },
     },
   },
+  -- or
+  {
+    "akinsho/toggleterm.nvim",
+    version = "*",
+    opts = function()
+      return require("devil.plugins.configs.toggleterm")
+    end,
+  },
 
   -- Only load whichkey after all the gui
   {
