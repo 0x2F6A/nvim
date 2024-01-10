@@ -20,19 +20,19 @@ return {
   highlights = {
     -- highlights which map to a highlight group name and a table of it's values
     -- NOTE: this is only a subset of values, any group placed here will be set for the terminal window split
-    Normal = {
-      guibg = "<VALUE-HERE>",
-    },
-    NormalFloat = {
-      link = "Normal",
-    },
-    FloatBorder = {
-      guifg = "<VALUE-HERE>",
-      guibg = "<VALUE-HERE>",
-    },
+    -- Normal = {
+    --   guibg = "<VALUE-HERE>",
+    -- },
+    -- NormalFloat = {
+    --   link = "Normal",
+    -- },
+    -- FloatBorder = {
+    --   guifg = "<VALUE-HERE>",
+    --   guibg = "<VALUE-HERE>",
+    -- },
   },
   shade_terminals = true, -- NOTE: this option takes priority over highlights specified so if you specify Normal highlights you should set this to false
-  shading_factor = "<number>", -- the percentage by which to lighten terminal background, default: -30 (gets multiplied by -3 if background is light)
+  shading_factor = "-30", -- the percentage by which to lighten terminal background, default: -30 (gets multiplied by -3 if background is light)
   start_in_insert = true,
   insert_mappings = true, -- whether or not the open mapping applies in insert mode
   terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
