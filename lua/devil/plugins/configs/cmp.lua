@@ -3,7 +3,6 @@ local luasnip = require("luasnip")
 local kind_icons = require("devil.core.utils").kind_icons
 
 local has_words_before = function()
-  unpack = unpack or table.unpack
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 end
@@ -200,4 +199,46 @@ if cmp_style ~= "atom" and cmp_style ~= "atom_colored" then
   options.window.completion.border = border("CmpBorder")
 end
 
-return options
+cmp.setup(options)
+
+---@diagnostic disable-next-line
+cmp.setup.cmdline({ "/", "?" }, {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = "buffer" },
+  },
+})
+
+---@diagnostic disable-next-line
+cmp.setup.cmdline("/", {
+  sources = cmp.config.sources({
+    { name = "nvim_lsp_document_symbol" },
+  }, {
+    { name = "buffer" },
+  }),
+})
+
+-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+---@diagnostic disable-next-line
+cmp.setup.cmdline(":", {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = "async_path" },
+  }, {
+    { name = "cmdline" },
+  }),
+})
+
+---@diagnostic disable-next-line
+cmp.setup.filetype("gitcommit", {
+  sources = cmp.config.sources({
+    -- You can specify the `git` source if [you were installed it](https://github.com/petertriho/cmp-git).
+    { name = "git" },
+  }, {
+    { name = "buffer" },
+  }, {
+    { name = "commit" },
+  }, {
+    { name = "emoji" },
+  }),
+})

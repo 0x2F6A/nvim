@@ -70,7 +70,7 @@ local plugins_list = {
     "williamboman/mason.nvim",
     lazy = false,
     event = "LSPAttach",
-    dependencies = { "williamboman/mason-lspconfig.nvim" },
+    dependencies = { "williamboman/mason-lspconfig.nvim", "jay-babu/mason-nvim-dap.nvim" },
     cmd = { "Mason", "MasonInstall", "MasonInstallAll", "MasonUpdate" },
     opts = function()
       return require("devil.plugins.configs.mason")
@@ -114,9 +114,8 @@ local plugins_list = {
         -- these settings will be used for your Neovim config directory
         runtime = true, -- runtime path
         types = true, -- full signature, docs and completion of vim.api, vim.treesitter, vim.lsp and others
-        plugins = true, -- installed opt or start plugins in packpath
         -- you can also specify the list of plugins to make available as a workspace library
-        -- plugins = { "nvim-treesitter", "plenary.nvim", "telescope.nvim" },
+        plugins = { "nvim-treesitter", "plenary.nvim", "telescope.nvim", "nvim-dap-ui" },
       },
       setup_jsonls = true, -- configures jsonls to provide completion for project specific .luarc.json files
       -- for your Neovim config directory, the config.library settings will be used as is
@@ -208,54 +207,23 @@ local plugins_list = {
         "David-Kunz/cmp-npm",
       },
     },
-    opts = function()
-      return require("devil.plugins.configs.cmp") ---@diagnostic disable-line
+    config = function()
+      require("devil.plugins.configs.cmp")
     end,
-    config = function(_, opts)
-      local cmp_plug = require("cmp")
-      cmp_plug.setup(opts)
+  },
 
-      ---@diagnostic disable-next-line
-      cmp_plug.setup.cmdline({ "/", "?" }, {
-        mapping = cmp_plug.mapping.preset.cmdline(),
-        sources = {
-          { name = "buffer" },
-        },
-      })
-
-      ---@diagnostic disable-next-line
-      cmp_plug.setup.cmdline("/", {
-        sources = cmp_plug.config.sources({
-          { name = "nvim_lsp_document_symbol" },
-        }, {
-          { name = "buffer" },
-        }),
-      })
-
-      -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-      ---@diagnostic disable-next-line
-      cmp_plug.setup.cmdline(":", {
-        mapping = cmp_plug.mapping.preset.cmdline(),
-        sources = cmp_plug.config.sources({
-          { name = "async_path" },
-        }, {
-          { name = "cmdline" },
-        }),
-      })
-
-      ---@diagnostic disable-next-line
-      cmp_plug.setup.filetype("gitcommit", {
-        sources = cmp_plug.config.sources({
-          -- You can specify the `git` source if [you were installed it](https://github.com/petertriho/cmp-git).
-          { name = "git" },
-        }, {
-          { name = "buffer" },
-        }, {
-          { name = "commit" },
-        }, {
-          { name = "emoji" },
-        }),
-      })
+  {
+    "mfussenegger/nvim-dap",
+    dependencies = {
+      "rcarriga/nvim-dap-ui",
+      "theHamsta/nvim-dap-virtual-text",
+      "LiadOz/nvim-dap-repl-highlights",
+    },
+    init = function()
+      utils.load_mappings("dap")
+    end,
+    config = function()
+      require("devil.plugins.configs.dap")
     end,
   },
 

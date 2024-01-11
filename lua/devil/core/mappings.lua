@@ -233,6 +233,8 @@ M.lspconfig = {
 }
 
 M.neo_tree = {
+  plugin = true,
+
   n = {
     ["<A-m>"] = {
       "<cmd> Neotree toggle <CR>",
@@ -240,8 +242,6 @@ M.neo_tree = {
     },
   },
 }
-
-M.bufferline = {}
 
 M.telescope = {
   plugin = true,
@@ -364,6 +364,7 @@ M.gitsigns = {
 }
 
 M.bufferline = {
+  plugin = true,
 
   n = {
     ["<C-h>"] = { "<CMD>BufferLineCyclePrev<CR>", "Cycle previous buffer" },
@@ -390,6 +391,68 @@ M.bufferline = {
     ["<leader>bp"] = { "<CMD>BufferLinePick<CR>", "Pick buffer" },
     ["<leader>bo"] = { "<CMD>BufferLineCloseRight<CR><CMD>BufferLineCloseLeft<CR>", "Close other buffer" },
     ["<leader>bc"] = { "<CMD>BufferLinePickClose<CR>", "Close picked buffer" },
+  },
+}
+
+M.dap = {
+  plugin = true,
+
+  n = {
+    -- debug
+    ["de"] = {
+      function()
+        local dap = require("dap")
+        local dap_ui = require("dapui")
+        dap.close()
+        dap.terminate()
+        dap.repl.close()
+        dap_ui.close()
+        dap.clear_breakpoints()
+      end,
+      "End debugger",
+    },
+    ["dc"] = {
+      function()
+        require("dap").continue()
+      end,
+      "Continue debug",
+    },
+    ["dt"] = {
+      function()
+        require("dap").toggle_breakpoint()
+      end,
+      "Set breakpoint",
+    },
+    ["dT"] = {
+      function()
+        require("dap").clear_breakpoints()
+      end,
+      "Clear breakpoint",
+    },
+    ["dj"] = {
+      function()
+        require("dap").step_over()
+      end,
+      "Step over",
+    },
+    ["dk"] = {
+      function()
+        require("dap").step_out()
+      end,
+      "Step out",
+    },
+    ["dl"] = {
+      function()
+        require("dap").step_into()
+      end,
+      "Step into",
+    },
+    ["dh"] = {
+      function()
+        require("dapui").eval()
+      end,
+      "Popups dapUI eval",
+    },
   },
 }
 
