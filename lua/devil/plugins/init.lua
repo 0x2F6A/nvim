@@ -47,6 +47,7 @@ local plugins_list = {
 
   {
     "nvim-treesitter/nvim-treesitter",
+    lazy = false,
     dependencies = {
       "nvim-treesitter/nvim-treesitter-refactor",
       "nvim-treesitter/nvim-treesitter-textobjects",
@@ -68,9 +69,12 @@ local plugins_list = {
 
   {
     "williamboman/mason.nvim",
-    lazy = false,
-    event = "LSPAttach",
-    dependencies = { "williamboman/mason-lspconfig.nvim", "jay-babu/mason-nvim-dap.nvim" },
+    lazy = true,
+    event = "LspAttach",
+    dependencies = {
+      "williamboman/mason-lspconfig.nvim",
+      { "jay-babu/mason-nvim-dap.nvim", cmd = { "DapInstall", "DapUninstall" } },
+    },
     cmd = { "Mason", "MasonInstall", "MasonInstallAll", "MasonUpdate" },
     opts = function()
       return require("devil.plugins.configs.mason")
@@ -87,7 +91,6 @@ local plugins_list = {
 
   {
     "neovim/nvim-lspconfig",
-    lazy = false,
     init = function()
       require("devil.core.utils").lazy_load("nvim-lspconfig")
     end,
@@ -107,6 +110,7 @@ local plugins_list = {
 
   {
     "folke/neodev.nvim",
+    event = "LspAttach",
     ft = { "lua" },
     opts = {
       library = {
@@ -132,11 +136,29 @@ local plugins_list = {
     },
   },
 
-  { "b0o/schemastore.nvim", event = "LSPAttach", ft = { "json", "yaml" } },
-  { "p00f/clangd_extensions.nvim", event = "LSPAttach", ft = { "c", "cpp" } },
+  { "b0o/schemastore.nvim", event = "LspAttach", ft = { "json", "yaml" } },
+  { "p00f/clangd_extensions.nvim", event = "LspAttach", ft = { "c", "cpp" } },
+  { "mrcjkb/rustaceanvim", event = "LspAttach", ft = { "rust" } },
 
   {
     "stevearc/conform.nvim",
+    event = "BufWritePre",
+    cmd = "ConformInfo",
+    keys = {
+      {
+        -- Customize or remove this keymap to your liking
+        "<leader>f",
+        function()
+          require("conform").format({ async = true, lsp_fallback = true })
+        end,
+        mode = "",
+        desc = "Format buffer",
+      },
+    },
+    init = function()
+      -- If you want the formatexpr, here is the place to set it
+      vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+    end,
     opts = function()
       return require("devil.plugins.configs.conform")
     end,
@@ -144,6 +166,7 @@ local plugins_list = {
 
   {
     "mfussenegger/nvim-lint",
+    event = "BufWritePost",
     config = function()
       require("devil.plugins.configs.lint")
     end,
@@ -151,6 +174,7 @@ local plugins_list = {
 
   {
     "onsails/lspkind.nvim",
+    event = "LspAttach",
     opts = function()
       return require("devil.plugins.configs.others").lspkind
     end,
@@ -162,7 +186,7 @@ local plugins_list = {
   -- load luasnips + cmp related in insert mode only
   {
     "hrsh7th/nvim-cmp",
-    event = "InsertEnter",
+    event = { "InsertEnter" },
     dependencies = {
       {
         -- snippet plugin
@@ -215,6 +239,7 @@ local plugins_list = {
 
   {
     "mfussenegger/nvim-dap",
+    lazy = true,
     dependencies = {
       "rcarriga/nvim-dap-ui",
       "theHamsta/nvim-dap-virtual-text",
@@ -256,7 +281,8 @@ local plugins_list = {
 
   {
     "dgagn/diagflow.nvim",
-    -- event = 'LspAttach', This is what I use personnally and it works great
+    lazy = true,
+    event = "LspAttach", -- This is what I use personnally and it works great
     opts = {
       scope = "line",
       format = function(diagnostic)
@@ -320,6 +346,7 @@ local plugins_list = {
 
   {
     "rcarriga/nvim-notify",
+    lazy = false,
     opts = {
       stages = "slide",
       timeout = 5000,
@@ -333,7 +360,6 @@ local plugins_list = {
 
   {
     "goolord/alpha-nvim",
-    lazy = true,
     event = "VimEnter",
     opts = function()
       return require("devil.plugins.configs.alpha")
@@ -390,6 +416,7 @@ local plugins_list = {
 
   {
     "folke/trouble.nvim",
+    cmd = { "TroubleToggle", "TroubleClose", "Trouble" },
     dependencies = { "nvim-tree/nvim-web-devicons" },
     opts = {},
   },
@@ -440,6 +467,10 @@ local plugins_list = {
   {
     "akinsho/toggleterm.nvim",
     version = "*",
+    cmd = "ToggleTerm",
+    keys = {
+      { "<C-\\>", "<cmd>ToggleTerm<CR>", desc = "Open ToggleTerm" },
+    },
     opts = function()
       return require("devil.plugins.configs.toggleterm")
     end,
