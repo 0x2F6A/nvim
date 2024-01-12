@@ -158,6 +158,7 @@ local plugins_list = {
     event = "LspAttach",
     ft = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
   },
+  { "vuki656/package-info.nvim", event = "BufRead package.json" },
   { "mrcjkb/rustaceanvim", event = "LspAttach", ft = { "rust" } },
   {
     "saecki/crates.nvim",
@@ -491,7 +492,7 @@ local plugins_list = {
       { "nvim-telescope/telescope-fzy-native.nvim" },
     },
   },
-  -- or
+
   {
     "akinsho/toggleterm.nvim",
     version = "*",
@@ -502,6 +503,22 @@ local plugins_list = {
     opts = function()
       return require("devil.plugins.configs.toggleterm")
     end,
+  },
+
+  {
+    "sontungexpt/stcursorword",
+    event = "VeryLazy",
+    opts = {
+      highlight = {
+        underline = true,
+      },
+    },
+  },
+
+  {
+    "lewis6991/satellite.nvim",
+    event = "VeryLazy",
+    opts = {},
   },
 
   -- Only load whichkey after all the gui
