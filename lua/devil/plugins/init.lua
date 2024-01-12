@@ -342,13 +342,10 @@ local plugins_list = {
   },
 
   {
-    "nvim-lualine/lualine.nvim",
+    "rebelot/heirline.nvim",
     lazy = false,
-    dependencies = {
-      "nvim-tree/nvim-web-devicons",
-    },
-    opts = function()
-      return require("devil.plugins.configs.lualine")
+    config = function()
+      require("devil.plugins.configs.heirline")
     end,
   },
 
@@ -503,16 +500,6 @@ local plugins_list = {
     opts = function()
       return require("devil.plugins.configs.toggleterm")
     end,
-  },
-
-  {
-    "sontungexpt/stcursorword",
-    event = "VeryLazy",
-    opts = {
-      highlight = {
-        underline = true,
-      },
-    },
   },
 
   {
