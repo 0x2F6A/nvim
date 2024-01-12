@@ -114,7 +114,20 @@ lspconfig.lua_ls.setup(merge_tb("force", default_config(), {
 local clangd_capabilities = M.capabilities
 clangd_capabilities.offsetEncoding = { "utf-16" } ---@diagnostic disable-line
 lspconfig.clangd.setup({
-  on_attach = M.on_attach,
+  on_attach = function(client, bufnr)
+    require("clangd_extensions").setup()
+
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
+
+    M.set_inlay_hints(client, bufnr)
+
+    utils.load_mappings("lspconfig", { buffer = bufnr })
+
+    vim.api.nvim_set_option_value("formatexpr", "v:lua.require'conform'.formatexpr()", { buf = bufnr })
+    vim.api.nvim_set_option_value("omnifunc", "v:lua.vim.lsp.omnifunc", { buf = bufnr })
+    vim.api.nvim_set_option_value("tagfunc", "v:lua.vim.lsp.tagfunc", { buf = bufnr })
+  end,
   capabilities = clangd_capabilities,
 
   settings = {

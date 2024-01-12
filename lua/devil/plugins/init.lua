@@ -132,7 +132,8 @@ local plugins_list = {
     },
   },
 
-  { "b0o/schemastore.nvim", event = "LSPAttach" },
+  { "b0o/schemastore.nvim", event = "LSPAttach", ft = { "json", "yaml" } },
+  { "p00f/clangd_extensions.nvim", event = "LSPAttach", ft = { "c", "cpp" } },
 
   {
     "stevearc/conform.nvim",
