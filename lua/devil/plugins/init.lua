@@ -101,6 +101,7 @@ local plugins_list = {
 
   {
     "j-hui/fidget.nvim",
+    event = "LspAttach",
     opts = {
       display = {
         progress_icon = { pattern = "dots", period = 1 },
@@ -349,24 +350,15 @@ local plugins_list = {
     end,
   },
 
-  -- bufdelete.nvim
-  -- Delete Neovim buffers without losing window layout
-  { "famiu/bufdelete.nvim", lazy = true },
-  -- bufferline.nvim
-  -- A snazzy bufferline for Neovim
   {
-    "akinsho/bufferline.nvim",
+    "willothy/nvim-cokeline",
     lazy = false,
-    dependencies = {
-      "nvim-tree/nvim-web-devicons",
-      "famiu/bufdelete.nvim",
-    },
-    version = "v4.*",
+    dependencies = "famiu/bufdelete.nvim",
     init = function()
-      utils.load_mappings("bufferline")
+      utils.load_mappings("cokeline")
     end,
     opts = function()
-      return require("devil.plugins.configs.bufferline")
+      return require("devil.plugins.configs.cokeline")
     end,
   },
 

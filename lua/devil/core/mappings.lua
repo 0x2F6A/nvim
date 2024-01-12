@@ -394,6 +394,28 @@ M.bufferline = {
   },
 }
 
+M.cokeline = {
+  plugin = true,
+
+  n = {
+    ["<C-h>"] = { "<Plug>(cokeline-focus-prev)", "Cycle focus previous buffer" },
+    ["<C-l>"] = { "<Plug>(cokeline-focus-next)", "Cycle focus next buffer" },
+    -- ["<C-w>"] = { "<CMD>Bdelete!<CR>", "Delete buffer" },
+    ["<C-w>"] = { "<Plug>(cokeline-pick-close)", "Close buffer" },
+    ["<leader>p"] = { "<Plug>(cokeline-switch-prev)", "Cycle switch previous buffer but not focus" },
+    ["<leader>n"] = { "<Plug>(cokeline-switch-next)", "Cycle switch next buffer but not focus" },
+    ["<A-1>"] = { "<Plug>(cokeline-focus-1)", "Go to 1 buffer" },
+    ["<A-2>"] = { "<Plug>(cokeline-focus-2)", "Go to 2 buffer" },
+    ["<A-3>"] = { "<Plug>(cokeline-focus-3)", "Go to 3 buffer" },
+    ["<A-4>"] = { "<Plug>(cokeline-focus-4)", "Go to 4 buffer" },
+    ["<A-5>"] = { "<Plug>(cokeline-focus-5)", "Go to 5 buffer" },
+    ["<A-6>"] = { "<Plug>(cokeline-focus-6)", "Go to 6 buffer" },
+    ["<A-7>"] = { "<Plug>(cokeline-focus-7)", "Go to 7 buffer" },
+    ["<A-8>"] = { "<Plug>(cokeline-focus-8)", "Go to 8 buffer" },
+    ["<A-9>"] = { "<Plug>(cokeline-focus-9)", "Go to 9 buffer" },
+  },
+}
+
 M.dap = {
   plugin = true,
 
