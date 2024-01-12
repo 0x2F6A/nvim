@@ -138,7 +138,35 @@ local plugins_list = {
 
   { "b0o/schemastore.nvim", event = "LspAttach", ft = { "json", "yaml" } },
   { "p00f/clangd_extensions.nvim", event = "LspAttach", ft = { "c", "cpp" } },
+
+  {
+    "ray-x/go.nvim",
+    dependencies = { -- optional packages
+      "ray-x/guihua.lua",
+      "neovim/nvim-lspconfig",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("go").setup()
+    end,
+    event = { "CmdlineEnter" },
+    ft = { "go", "gomod" },
+    build = ':lua require("go.install").update_all_sync()', -- if you need to install/update all binaries
+  },
+  {
+    "pmizio/typescript-tools.nvim",
+    event = "LspAttach",
+    ft = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+  },
   { "mrcjkb/rustaceanvim", event = "LspAttach", ft = { "rust" } },
+  {
+    "saecki/crates.nvim",
+    tag = "stable",
+    event = "BufRead Cargo.toml",
+    config = function()
+      require("crates").setup()
+    end,
+  },
 
   {
     "stevearc/conform.nvim",
