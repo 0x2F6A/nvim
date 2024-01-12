@@ -254,6 +254,20 @@ local plugins_list = {
   },
 
   {
+    "dgagn/diagflow.nvim",
+    -- event = 'LspAttach', This is what I use personnally and it works great
+    opts = {
+      scope = "line",
+      format = function(diagnostic)
+        return "[LSP] " .. diagnostic.message
+      end,
+      enable = function()
+        return vim.bo.filetype ~= "lazy"
+      end,
+    },
+  },
+
+  {
     "nvim-neo-tree/neo-tree.nvim",
     lazy = false,
     branch = "v3.x",
