@@ -1,6 +1,7 @@
 local M = {}
 local utils = require("devil.core.utils")
 local lspconfig = require("lspconfig")
+local lsp_util = require("lspconfig.util")
 
 local merge_tb = vim.tbl_deep_extend
 local inlay_hint = vim.lsp.inlay_hint
@@ -142,6 +143,27 @@ lspconfig.clangd.setup({
     },
   },
 })
+
+if not lspconfig.neocmake then
+  lspconfig.neocmake = {
+    default_config = {
+      cmd = { "neocmakelsp", "--stdio" },
+      filetypes = { "cmake" },
+      root_dir = function(fname)
+        return lsp_util.find_git_ancestor(fname)
+      end,
+      single_file_support = true, -- suggested
+      on_attach = M.on_attach, -- on_attach is the on_attach function you defined
+      init_options = {
+        format = {
+          enable = true,
+        },
+        scan_cmake_in_package = true, -- default is true
+      },
+    },
+  }
+  lspconfig.neocmake.setup({})
+end
 
 lspconfig.gopls.setup(merge_tb("force", default_config(), {
   settings = {
