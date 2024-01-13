@@ -52,6 +52,16 @@ local components = {
     truncation = { priority = 1 },
   },
 
+  tabs_index = {
+    text = function(buffer)
+      return " " .. buffer.index .. " "
+    end,
+    truncation = { priority = 2 },
+    bg = function()
+      return get_hex("Normal", "bg")
+    end,
+  },
+
   unique_prefix = {
     text = function(buffer)
       return buffer.unique_prefix
@@ -214,9 +224,11 @@ return {
   -- buffer objects.
   ---@type table | false
   tabs = {
-    placement = "left",
+    placement = "right",
     ---@type Component[]
-    components = {},
+    components = {
+      components.tabs_index,
+    },
   },
 
   sidebar = {
