@@ -3,6 +3,9 @@ local utils = require("devil.core.utils")
 local lspconfig = require("lspconfig")
 -- local lsp_util = require("lspconfig.util")
 
+local mason_registry = require("mason-registry")
+local tsserver_path = mason_registry.get_package("typescript-language-server"):get_install_path()
+
 local merge_tb = vim.tbl_deep_extend
 local inlay_hint = vim.lsp.inlay_hint
 
@@ -62,10 +65,11 @@ local default_config = function()
 end
 
 local noconfig_servers = {
-  "neocmake",
+  "bashls",
   "emmet_language_server",
   "eslint",
   "html",
+  "neocmake",
   "svelte",
   "volar",
   "vimls",
@@ -381,7 +385,7 @@ require("typescript-tools").setup({
     expose_as_code_action = {},
     -- string|nil - specify a custom path to `tsserver.js` file, if this is nil or file under path
     -- not exists then standard path resolution strategy is applied
-    tsserver_path = nil,
+    tsserver_path = tsserver_path .. "/node_modules/typescript/lib/tsserver.js",
     -- specify a list of plugins to load by tsserver, e.g., for support `styled-components`
     -- (see 💅 `styled-components` support section)
     tsserver_plugins = {},
