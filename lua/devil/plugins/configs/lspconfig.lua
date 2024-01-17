@@ -75,6 +75,7 @@ local noconfig_servers = {
   "eslint",
   "html",
   "neocmake",
+  "serve_d",
   "svelte",
   "volar",
   "vimls",
