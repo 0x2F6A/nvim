@@ -3,6 +3,11 @@ local utils = require("devil.core.utils")
 local lspconfig = require("lspconfig")
 -- local lsp_util = require("lspconfig.util")
 
+require("mason-lspconfig").setup({
+  automatic_installation = false,
+  ensure_installed = { "clangd", "gopls", "lua_ls", "rust_analyzer", "tsserver", "zls" },
+})
+
 -- local mason_registry = require("mason-registry")
 -- local tsserver_path = mason_registry.get_package("typescript-language-server"):get_install_path()
 

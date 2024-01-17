@@ -81,11 +81,6 @@ local plugins_list = {
     end,
     config = function(_, opts)
       require("mason").setup(opts)
-
-      require("mason-lspconfig").setup({
-        automatic_installation = false,
-        ensure_installed = { "clangd", "gopls", "lua_ls", "rust_analyzer", "tsserver", "zls" },
-      })
     end,
   },
 
