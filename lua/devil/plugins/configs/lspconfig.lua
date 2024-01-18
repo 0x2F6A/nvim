@@ -460,8 +460,9 @@ lspconfig.yamlls.setup(merge_tb("force", default_config(), {
   },
 }))
 
-lspconfig.pylsp.setup(merge_tb("force", default_config(), {
+lspconfig.pyright.setup(merge_tb("force", default_config(), {
   settings = {
+    --[[
     pylsp = {
       plugins = {
         ruff = {
@@ -485,6 +486,14 @@ lspconfig.pylsp.setup(merge_tb("force", default_config(), {
         mccabe = { enabled = false },
         pycodestyle = { enabled = false },
         pyflakes = { enabled = false },
+      },
+    },
+    ]]
+    python = {
+      analysis = {
+        autoSearchPaths = true,
+        diagnosticMode = "openFilesOnly",
+        useLibraryCodeForTypes = true,
       },
     },
   },
