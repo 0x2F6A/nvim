@@ -50,7 +50,7 @@ local plugins_list = {
     version = "*",
     event = "VeryLazy",
     config = function()
-      require("nvim-surround").setup({})
+      require("nvim-surround").setup()
     end,
   },
 
@@ -414,6 +414,20 @@ local plugins_list = {
       require("notify").setup(opts)
       vim.notify = require("notify")
     end,
+  },
+
+  {
+    "petertriho/nvim-scrollbar",
+    opts = {
+      handlers = {
+        cursor = true,
+        diagnostic = true,
+        gitsigns = true, -- Requires gitsigns
+        handle = true,
+        search = true, -- Requires hlslens
+        ale = false, -- Requires ALE
+      },
+    },
   },
 
   {
