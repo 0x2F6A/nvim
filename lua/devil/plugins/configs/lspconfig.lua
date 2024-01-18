@@ -77,6 +77,7 @@ local noconfig_servers = {
   "neocmake",
   "serve_d",
   "svelte",
+  "vala_ls",
   "volar",
   "vimls",
 }
