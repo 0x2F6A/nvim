@@ -243,6 +243,23 @@ local plugins_list = {
   },
 
   {
+    "nvim-neotest/neotest",
+    dependencies = {
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-neotest/neotest-python",
+      "nvim-neotest/neotest-jest",
+      "nvim-neotest/neotest-plenary",
+      "nvim-neotest/neotest-go",
+      "nvim-neotest/neotest-vim-test",
+      "rouge8/neotest-rust",
+      "lawrence-laz/neotest-zig",
+    },
+    opts = function()
+      return require("devil.plugins.configs.neotest")
+    end,
+  },
+
+  {
     "Wansmer/symbol-usage.nvim",
     event = "BufReadPre", -- need run before LspAttach if you use nvim 0.9. On 0.10 use 'LspAttach'
     opts = function()
