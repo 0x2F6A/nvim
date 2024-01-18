@@ -243,6 +243,14 @@ local plugins_list = {
   },
 
   {
+    "Wansmer/symbol-usage.nvim",
+    event = "BufReadPre", -- need run before LspAttach if you use nvim 0.9. On 0.10 use 'LspAttach'
+    opts = function()
+      return require("devil.plugins.configs.symbol-usage")
+    end,
+  },
+
+  {
     "onsails/lspkind.nvim",
     event = "LspAttach",
     opts = function()

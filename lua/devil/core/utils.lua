@@ -157,6 +157,28 @@ M.kind_icons = {
   TypeParameter = "󰊄 ",
 }
 
+M.exclude_ft = {
+  "lazy",
+  "null-ls-info",
+  "dashboard",
+  "packer",
+  "terminal",
+  "help",
+  "log",
+  "markdown",
+  "TelescopePrompt",
+  "mason",
+  "mason-lspconfig",
+  "lspinfo",
+  "toggleterm",
+  "text",
+  "checkhealth",
+  "man",
+  "gitcommit",
+  "TelescopePrompt",
+  "TelescopeResults",
+}
+
 local proxy_lsps = {
   ["null-ls"] = true,
   ["efm"] = true,
