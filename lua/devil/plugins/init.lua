@@ -98,8 +98,10 @@ local plugins_list = {
     "j-hui/fidget.nvim",
     event = "LspAttach",
     opts = {
-      display = {
-        progress_icon = { pattern = "dots", period = 1 },
+      progress = {
+        display = {
+          progress_icon = { pattern = "dots", period = 1 },
+        },
       },
     },
   },
