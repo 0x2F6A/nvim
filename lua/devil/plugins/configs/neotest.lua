@@ -8,5 +8,8 @@ return {
       ignore_file_types = { "python", "vim", "lua" },
     }),
     require("neotest-go"),
+    require("neotest-rust"),
+    require("neotest-zig"),
+    require("neotest-jest"),
   },
 }
