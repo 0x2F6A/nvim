@@ -431,6 +431,17 @@ local plugins_list = {
   },
 
   {
+    "Bekaboo/dropbar.nvim",
+    event = "LspAttach",
+    dependencies = {
+      "nvim-telescope/telescope-fzf-native.nvim",
+    },
+    opts = {
+      icons = { kinds = { symbols = utils.kind_icons } },
+    },
+  },
+
+  {
     "rcarriga/nvim-notify",
     lazy = false,
     opts = {
