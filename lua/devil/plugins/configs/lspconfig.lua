@@ -76,6 +76,7 @@ local noconfig_servers = {
   "html",
   "neocmake",
   "serve_d",
+  "slint_lsp",
   "svelte",
   "vala_ls",
   "volar",
