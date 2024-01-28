@@ -3,6 +3,7 @@ return {
   install = { colorscheme = { "onedark" } },
 
   ui = {
+    border = "single",
     icons = {
       ft = "",
       lazy = "󰂠 ",

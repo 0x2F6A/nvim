@@ -390,7 +390,7 @@ local plugins_list = {
     opts = {
       bind = true, -- This is mandatory, otherwise border config won't get registered.
       handler_opts = {
-        border = "rounded",
+        border = "single",
       },
       hint_enable = false,
     },

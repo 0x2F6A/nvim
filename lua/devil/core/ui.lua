@@ -13,7 +13,7 @@ vim.diagnostic.config({
   severity_sort = false,
   float = {
     source = "always",
-    border = "rounded",
+    border = "single",
     style = "minimal",
     header = "",
     -- prefix = " ",

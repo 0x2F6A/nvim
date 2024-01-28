@@ -6,7 +6,7 @@ local options = {
   -- "NC" is a special style that works well with NormalNC set
   default_source = "filesystem", -- you can choose a specific source `last` here which indicates the last used source
   close_if_last_window = true, -- Close Neo-tree if it is the last window left in the tab
-  popup_border_style = "rounded",
+  popup_border_style = "single",
   enable_git_status = true,
   enable_diagnostics = true,
   enable_normal_mode_for_inputs = false, -- Enable normal mode for input dialogs

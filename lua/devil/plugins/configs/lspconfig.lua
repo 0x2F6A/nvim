@@ -36,7 +36,7 @@ function M.on_attach(client, bufnr)
   require("lsp_signature").on_attach({
     bind = true,
     handler_opts = {
-      border = "rounded",
+      border = "single",
     },
   }, bufnr)
 
@@ -143,7 +143,7 @@ lspconfig.clangd.setup({
     require("lsp_signature").on_attach({
       bind = true,
       handler_opts = {
-        border = "rounded",
+        border = "single",
       },
     }, bufnr)
 

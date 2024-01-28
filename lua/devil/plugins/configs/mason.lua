@@ -6,7 +6,7 @@ local options = {
     check_outdated_packages_on_open = true,
 
     -- The border to use for the UI window. Accepts same border values as |nvim_open_win()|.
-    border = "rounded",
+    border = "single",
 
     -- Width of the window. Accepts:
     -- - Integer greater than 1 for fixed width.
