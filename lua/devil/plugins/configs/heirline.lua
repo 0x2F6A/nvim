@@ -4,8 +4,8 @@ local conditions = require("heirline.conditions")
 local utils = require("heirline.utils")
 
 local Align = { provider = "%=" }
-local Space = { provider = " " }
-local Separators = { provider = "|" }
+local Space = { provider = "%2(%)" }
+local Separators = { provider = " | " }
 
 local function setup_colors()
   return {
@@ -415,6 +415,7 @@ local Git = {
 }
 
 local SignatureHelp = {
+  condition = conditions.lsp_attached,
   provider = function()
     if not pcall(require, "lsp_signature") then
       return
@@ -422,6 +423,7 @@ local SignatureHelp = {
     local sig = require("lsp_signature").status_line()
     return sig.label .. "🐼" .. sig.hint
   end,
+  hl = { fg = "lightyellow", italic = true },
 }
 
 --[[
@@ -529,13 +531,9 @@ local DefaultStatusline = {
   Align,
   Align,
   LSPActive,
-  Space,
   Separators,
-  Space,
   FileInfoBlock,
-  Space,
   Separators,
-  Space,
   Ruler,
   Space,
   ScrollBar,
