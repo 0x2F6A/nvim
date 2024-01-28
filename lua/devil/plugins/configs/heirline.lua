@@ -336,9 +336,6 @@ local Diagnostics = {
   update = { "DiagnosticChanged", "BufEnter" },
 
   {
-    provider = "![",
-  },
-  {
     provider = function(self)
       -- 0 is just another output, we can decide to print it or not!
       return self.errors > 0 and (self.error_icon .. self.errors .. " ")
@@ -362,9 +359,6 @@ local Diagnostics = {
       return self.hints > 0 and (self.hint_icon .. self.hints)
     end,
     hl = { fg = "diag_hint" },
-  },
-  {
-    provider = "]",
   },
 }
 
@@ -418,6 +412,16 @@ local Git = {
     end,
     provider = ")",
   },
+}
+
+local SignatureHelp = {
+  provider = function()
+    if not pcall(require, "lsp_signature") then
+      return
+    end
+    local sig = require("lsp_signature").status_line()
+    return sig.label .. "🐼" .. sig.hint
+  end,
 }
 
 --[[
@@ -517,11 +521,11 @@ local DefaultStatusline = {
   Space,
   FileNameBlock,
   Space,
-  Separators,
-  Space,
   Git,
   Space,
   Diagnostics,
+  Space,
+  SignatureHelp,
   Align,
   Align,
   LSPActive,

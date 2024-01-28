@@ -318,7 +318,6 @@ local plugins_list = {
         "hrsh7th/cmp-buffer",
         "hrsh7th/cmp-calc",
         "hrsh7th/cmp-cmdline",
-        "hrsh7th/cmp-nvim-lsp-signature-help",
         "hrsh7th/cmp-nvim-lsp-document-symbol",
         "hrsh7th/cmp-nvim-lua",
         "hrsh7th/cmp-emoji",
@@ -374,6 +373,29 @@ local plugins_list = {
     end,
     opts = function()
       return require("devil.plugins.configs.others").gitsigns
+    end,
+  },
+
+  {
+    "ray-x/lsp_signature.nvim",
+    event = "LspAttach",
+    keys = {
+      {
+        "<C-k>",
+        function()
+          require("lsp_signature").toggle_float_win()
+        end,
+      },
+    },
+    opts = {
+      bind = true, -- This is mandatory, otherwise border config won't get registered.
+      handler_opts = {
+        border = "rounded",
+      },
+      hint_enable = false,
+    },
+    config = function(_, opts)
+      require("lsp_signature").setup(opts)
     end,
   },
 

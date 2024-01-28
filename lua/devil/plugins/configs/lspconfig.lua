@@ -33,6 +33,13 @@ function M.on_attach(client, bufnr)
   client.server_capabilities.documentFormattingProvider = false
   client.server_capabilities.documentRangeFormattingProvider = false
 
+  require("lsp_signature").on_attach({
+    bind = true,
+    handler_opts = {
+      border = "rounded",
+    },
+  }, bufnr)
+
   M.set_inlay_hints(client, bufnr)
 
   utils.load_mappings("lspconfig", { buffer = bufnr })
@@ -132,6 +139,13 @@ lspconfig.clangd.setup({
 
     client.server_capabilities.documentFormattingProvider = false
     client.server_capabilities.documentRangeFormattingProvider = false
+
+    require("lsp_signature").on_attach({
+      bind = true,
+      handler_opts = {
+        border = "rounded",
+      },
+    }, bufnr)
 
     M.set_inlay_hints(client, bufnr)
 
