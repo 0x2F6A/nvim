@@ -11,6 +11,8 @@ local options = {
     "javascript",
     "json",
     "lua",
+    "markdown",
+    "markdown_inline",
     "python",
     "rust",
     "ruby",
