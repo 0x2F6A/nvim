@@ -60,7 +60,7 @@ local plugins_list = {
     dependencies = {
       "nvim-treesitter/nvim-treesitter-refactor",
       "nvim-treesitter/nvim-treesitter-textobjects",
-      "nvim-treesitter/nvim-tree-docs",
+      "nvim-treesitter/nvim-treesitter-context",
       "nvim-treesitter/playground",
       "windwp/nvim-ts-autotag",
       "RRethy/nvim-treesitter-endwise",
