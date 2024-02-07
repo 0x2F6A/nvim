@@ -1,7 +1,7 @@
 local options = {
   -- Map of filetype to formatters
   formatters_by_ft = {
-    bash = { "beautysh" },
+    bash = { "shfmt" },
     c = { "clang_format" },
     clojure = { "zprint" },
     cmake = { "cmake_format" },
