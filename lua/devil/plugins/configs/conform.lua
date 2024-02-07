@@ -16,6 +16,7 @@ local options = {
     json = { "jq" },
     kotlin = { "ktlint" },
     lua = { "stylua" },
+    nix = { "nixpkgs_fmt" },
     perl = { "perlimports", "perltidy" },
     php = { "php_cs_fixer" },
     python = function(bufnr)

@@ -82,6 +82,7 @@ local noconfig_servers = {
   "eslint",
   "html",
   "neocmake",
+  "nil_ls",
   "phpactor",
   "serve_d",
   "slint_lsp",
