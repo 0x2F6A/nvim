@@ -17,6 +17,12 @@ local plugins_list = {
       require("onedark").setup({ style = "darker" })
     end,
   },
+  {
+    "EdenEast/nightfox.nvim",
+    config = function()
+      require("nightfox").setup()
+    end,
+  },
 
   {
     "nvim-tree/nvim-web-devicons",
