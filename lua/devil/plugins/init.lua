@@ -464,6 +464,19 @@ local plugins_list = {
   },
 
   {
+    "hedyhli/outline.nvim",
+    cmd = { "Outline", "OutlineOpen" },
+    keys = {
+      { "<leader>o", "<cmd>Outline<CR>", desc = "Toggle outline" },
+    },
+    opts = {
+      symbols = {
+        icon_source = "lspkind",
+      },
+    },
+  },
+
+  {
     "rcarriga/nvim-notify",
     lazy = false,
     opts = {
