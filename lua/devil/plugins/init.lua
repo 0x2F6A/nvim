@@ -7,8 +7,9 @@ end
 local utils = require("devil.core.utils")
 
 local plugins_list = {
-  "nvim-lua/plenary.nvim",
-  "folke/lazy.nvim",
+  { "nvim-lua/plenary.nvim", lazy = false },
+  { "folke/lazy.nvim", lazy = false },
+  { "stevearc/dressing.nvim", lazy = false },
 
   {
     "navarasu/onedark.nvim",
@@ -474,6 +475,26 @@ local plugins_list = {
         icon_source = "lspkind",
       },
     },
+  },
+
+  {
+    "smjonas/inc-rename.nvim",
+    event = "LspAttach",
+    keys = {
+      {
+        "<leader>rn",
+        function()
+          return ":IncRename " .. vim.fn.expand("<cword>")
+        end,
+        expr = true,
+      },
+    },
+    opts = {
+      input_buffer_type = "dressing",
+    },
+    config = function(_, opts)
+      require("inc_rename").setup(opts)
+    end,
   },
 
   {
