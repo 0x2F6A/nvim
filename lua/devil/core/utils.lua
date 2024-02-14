@@ -58,7 +58,6 @@ function M.load_mappings(section, mapping_opt)
 end
 
 -- Lazy load plugins
----@param plugin string
 function M.lazy_load(plugin)
   vim.api.nvim_create_autocmd({ "BufRead", "BufWinEnter", "BufNewFile" }, {
     group = vim.api.nvim_create_augroup("BeLazyOnFileOpen" .. plugin, {}),
@@ -78,7 +77,7 @@ function M.lazy_load(plugin)
             if plugin == "nvim-lspconfig" or plugin == "neo-tree" then
               vim.cmd("silent! do FileType")
             end
-          end, 0)
+          end)
         else
           require("lazy").load({ plugins = plugin })
         end

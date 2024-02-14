@@ -47,13 +47,16 @@ local components = {
 
   index = {
     text = function(buffer)
-      return buffer.index .. " 󰁎 "
+      return buffer.index .. ":" .. buffer.number .. " 󰁎 "
     end,
     truncation = { priority = 1 },
   },
 
   tabs_index = {
     text = function(buffer)
+      if buffer.is_first and buffer.is_last then
+        return ""
+      end
       return " " .. buffer.index .. " "
     end,
     truncation = { priority = 2 },
