@@ -77,6 +77,7 @@ local default_config = function()
 end
 
 local noconfig_servers = {
+  "angularls",
   "bashls",
   "emmet_language_server",
   "eslint",
