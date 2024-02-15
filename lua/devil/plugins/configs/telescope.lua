@@ -72,9 +72,18 @@ local options = {
     "smart_open",
     "ui-select",
     "undo",
+    "ast_grep",
   },
 
   extensions = {
+    ast_grep = {
+      command = {
+        "sg",
+        "--json=stream",
+      }, -- must have --json=stream
+      grep_open_files = false, -- search in opened files
+      lang = nil, -- string value, specify language for ast-grep `nil` for default
+    },
     file_browser = {
       -- disables netrw and use telescope-file-browser in its place
       hijack_netrw = false,
