@@ -1,7 +1,7 @@
 local options = {
   backup = false, -- create a backup file
   clipboard = "unnamedplus", -- allows neovim to access the system clipboard
-  cmdheight = 2, -- more space in the eovim command line for displaying messages
+  cmdheight = 1, -- more space in the eovim command line for displaying messages
   completeopt = { "menuone", "noselect" }, -- mostly just for cmp
   conceallevel = 0, -- so that `` is visiable in markdown files
   fileencoding = "utf-8", -- the encoding written to a file
