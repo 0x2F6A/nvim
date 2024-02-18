@@ -1,7 +1,7 @@
 local M = {}
 local utils = require("devil.core.utils")
 local lspconfig = require("lspconfig")
--- local lsp_util = require("lspconfig.util")
+local lsp_util = require("lspconfig.util")
 
 require("mason-lspconfig").setup({
   automatic_installation = false,
@@ -80,7 +80,6 @@ local noconfig_servers = {
   "angularls",
   "bashls",
   "emmet_language_server",
-  "eslint",
   "html",
   "neocmake",
   "nil_ls",
@@ -451,6 +450,23 @@ require("typescript-tools").setup({
     },
   },
 })
+
+lspconfig.eslint.setup(merge_tb("force", default_config(), {
+  root_dir = function(fname)
+    local root_file = lsp_util.insert_package_json({
+      ".eslintrc",
+      ".eslintrc.js",
+      ".eslintrc.cjs",
+      ".eslintrc.yaml",
+      ".eslintrc.yml",
+      ".eslintrc.json",
+      "eslint.config.js",
+      "eslint.config.mjs",
+    }, "eslintConfig", fname)
+
+    return lsp_util.root_pattern(unpack(root_file))(fname)
+  end,
+}))
 
 lspconfig.jsonls.setup(merge_tb("force", default_config(), {
   settings = {

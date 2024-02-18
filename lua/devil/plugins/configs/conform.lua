@@ -1,3 +1,5 @@
+local util = require("conform.util")
+
 local options = {
   -- Map of filetype to formatters
   formatters_by_ft = {
@@ -12,7 +14,8 @@ local options = {
     fish = { "fish_indent" },
     go = { "gofumpt", "goimports-reviser", "golines" },
     java = { "google-java-format" },
-    javascript = { { "prettierd", "prettier" } },
+    javascript = { "prettier" },
+    javascriptreact = { "prettier" },
     json = { "jq" },
     kotlin = { "ktlint" },
     lua = { "stylua" },
@@ -31,6 +34,8 @@ local options = {
     scala = { "scalafmt" },
     sh = { "shfmt" },
     toml = { "taplo" },
+    typescript = { "prettier" },
+    typescriptreact = { "prettier" },
     xml = { "xmlformat" },
     yaml = { "yamlfmt" },
     zig = { "zigfmt" },
@@ -62,6 +67,21 @@ local options = {
   formatters = {
     prettier = {
       prepend_args = { "--no-semi" },
+      cwd = util.root_file({
+        -- https://prettier.io/docs/en/configuration.html
+        ".prettierrc",
+        ".prettierrc.json",
+        ".prettierrc.yml",
+        ".prettierrc.yaml",
+        ".prettierrc.json5",
+        ".prettierrc.js",
+        ".prettierrc.cjs",
+        ".prettierrc.toml",
+        "prettier.config.js",
+        "prettier.config.cjs",
+        "prettier.config.mjs",
+        "package.json",
+      }),
     },
   },
 }
