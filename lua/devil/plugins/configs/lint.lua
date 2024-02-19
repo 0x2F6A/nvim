@@ -3,6 +3,7 @@ local lint = require("lint")
 lint.linters_by_ft = {
   c = { "clangtidy" },
   cpp = { "clangtidy" },
+  css = { "stylelint" },
   lua = { "selene" },
   go = { "golangcilint" },
   javascript = { "eslint" },
