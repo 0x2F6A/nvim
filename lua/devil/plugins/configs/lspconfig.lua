@@ -79,6 +79,7 @@ end
 local noconfig_servers = {
   "angularls",
   "bashls",
+  "elixirls",
   "emmet_language_server",
   "html",
   "neocmake",
