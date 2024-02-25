@@ -210,4 +210,4 @@ local opts = {
   end,
 }
 
-jdtls.start_or_attach(opts)
+return opts

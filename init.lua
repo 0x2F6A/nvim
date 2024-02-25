@@ -11,3 +11,4 @@ require("devil.plugins")
 
 require("devil.core.commands")
 require("devil.core.colorscheme")
+require("devil.core.autocmds")

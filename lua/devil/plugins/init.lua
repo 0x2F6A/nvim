@@ -190,7 +190,15 @@ local plugins_list = {
     "mfussenegger/nvim-jdtls",
     ft = "java",
     config = function()
-      require("devil.plugins.configs.jdtls")
+      local config = require("devil.plugins.configs.jdtls")
+
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "java",
+        callback = function()
+          require("jdtls").start_or_attach(config)
+        end,
+        group = vim.api.nvim_create_augroup("AttachJDTLS", { clear = true }),
+      })
     end,
   },
 
