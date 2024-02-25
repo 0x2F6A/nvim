@@ -25,12 +25,3 @@ autocmd("FileType", {
     vim.opt.number = false
   end,
 })
-
-autocmd("FileType", {
-  group = common,
-  pattern = { "java" },
-  desc = "Attach nvim-jdtls on every buffer",
-  callback = function()
-    require("devil.plugins.configs.jdtls")
-  end,
-})
