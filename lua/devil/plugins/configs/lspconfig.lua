@@ -83,7 +83,7 @@ local noconfig_servers = {
   "emmet_language_server",
   "html",
   "lemminx",
-  "maksman",
+  "marksman",
   "neocmake",
   "nil_ls",
   "phpactor",
