@@ -127,8 +127,7 @@ local plugins_list = {
 
   {
     "folke/neodev.nvim",
-    event = "LspAttach",
-    ft = { "lua" },
+    ft = "lua",
     opts = {
       library = {
         enabled = true, -- when not enabled, neodev will not change any settings to the LSP server
@@ -153,11 +152,14 @@ local plugins_list = {
     },
   },
 
-  { "b0o/schemastore.nvim", event = "LspAttach", ft = { "json", "yaml" } },
-  { "p00f/clangd_extensions.nvim", event = "LspAttach", ft = { "c", "cpp" } },
+  { "b0o/schemastore.nvim", ft = { "json", "yaml" } },
+  { "p00f/clangd_extensions.nvim", ft = { "c", "cpp" } },
 
   {
     "ray-x/go.nvim",
+    ft = { "go", "gomod", "gowork", "gosum" },
+    event = { "CmdlineEnter" },
+    build = ':lua require("go.install").update_all_sync()', -- if you need to install/update all binaries
     dependencies = { -- optional packages
       "ray-x/guihua.lua",
       "neovim/nvim-lspconfig",
@@ -166,17 +168,15 @@ local plugins_list = {
     config = function()
       require("go").setup()
     end,
-    event = { "CmdlineEnter" },
-    ft = { "go", "gomod" },
-    build = ':lua require("go.install").update_all_sync()', -- if you need to install/update all binaries
   },
+
   {
     "pmizio/typescript-tools.nvim",
-    event = "LspAttach",
     ft = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
   },
   { "vuki656/package-info.nvim", event = "BufRead package.json" },
-  { "mrcjkb/rustaceanvim", event = "LspAttach", ft = { "rust" } },
+
+  { "mrcjkb/rustaceanvim", ft = "rust" },
   {
     "saecki/crates.nvim",
     tag = "stable",
@@ -185,6 +185,15 @@ local plugins_list = {
       require("crates").setup()
     end,
   },
+
+  {
+    "mfussenegger/nvim-jdtls",
+    ft = "java",
+    config = function()
+      require("devil.plugins.configs.jdtls")
+    end,
+  },
+
   {
     -- "numiras/semshi",
     "wookayin/semshi", -- use a maintained fork
