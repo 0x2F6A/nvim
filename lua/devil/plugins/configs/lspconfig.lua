@@ -512,9 +512,20 @@ lspconfig.pyright.setup(merge_tb("force", default_config(), {
   },
 }))
 
+--[[
 lspconfig.omnisharp.setup(merge_tb("force", default_config(), {
   handlers = {
     ["textDocument/definition"] = require("omnisharp_extended").handler,
+  },
+}))
+]]
+lspconfig.csharp_ls.setup(merge_tb("force", default_config(), {
+  handlers = {
+    ["textDocument/definition"] = require("csharpls_extended").handler,
+    ["textDocument/typeDefinition"] = require("csharpls_extended").handler,
+  },
+  init_options = {
+    AutomaticWorkspaceInit = true,
   },
 }))
 
