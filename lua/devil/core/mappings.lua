@@ -131,7 +131,7 @@ M.lspconfig = {
         if vim.bo.filetype == "cs" then
           -- vim.lsp.buf.definition({ reuse_win = true })
           -- require("omnisharp_extended").telescope_lsp_definitions()
-          require("csharp_ls_extended").lsp_definitions()
+          require("csharpls_extended").lsp_definitions()
         else
           ts_builtin.lsp_definitions(ts_themes.get_cursor({ reuse_win = true }))
         end
