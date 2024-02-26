@@ -173,10 +173,19 @@ local plugins_list = {
   {
     "pmizio/typescript-tools.nvim",
     ft = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+    opts = function()
+      return require("devil.plugins.configs.typescript-tools")
+    end,
   },
   { "vuki656/package-info.nvim", event = "BufRead package.json" },
 
-  { "mrcjkb/rustaceanvim", ft = "rust" },
+  {
+    "mrcjkb/rustaceanvim",
+    ft = "rust",
+    config = function()
+      require("devil.plugins.configs.rustaceanvim")
+    end,
+  },
   {
     "saecki/crates.nvim",
     tag = "stable",
@@ -198,6 +207,27 @@ local plugins_list = {
           require("jdtls").start_or_attach(config)
         end,
         group = vim.api.nvim_create_augroup("AttachJDTLS", { clear = true }),
+      })
+    end,
+  },
+
+  {
+    "scalameta/nvim-metals",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    ft = { "scala", "sbt", "java" },
+    opts = function()
+      return require("devil.plugins.configs.metals")
+    end,
+    config = function(self, metals_config)
+      local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = self.ft,
+        callback = function()
+          require("metals").initialize_or_attach(metals_config)
+        end,
+        group = nvim_metals_group,
       })
     end,
   },

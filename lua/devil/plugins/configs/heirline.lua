@@ -3,6 +3,8 @@ local heirline = require("heirline")
 local conditions = require("heirline.conditions")
 local utils = require("heirline.utils")
 
+local G_utils = require("devil.core.utils")
+
 local Align = { provider = "%=" }
 local Space = { provider = "%2(%)" }
 local Separators = { provider = " | " }
@@ -306,11 +308,7 @@ local LSPActive = {
 
   -- Or complicate things a bit and get the servers names
   provider = function()
-    local names = {}
-    for _, server in pairs(vim.lsp.get_clients({ bufnr = 0 })) do
-      table.insert(names, server.name)
-    end
-    return " [" .. table.concat(names, " ") .. "]"
+    return G_utils.get_lsp_info()
   end,
   hl = { fg = "green", bold = true },
 }

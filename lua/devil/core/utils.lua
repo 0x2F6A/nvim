@@ -156,6 +156,7 @@ M.kind_icons = {
   TypeParameter = "󰊄 ",
 }
 
+-- Excluded filetypes
 M.exclude_ft = {
   "lazy",
   "null-ls-info",
@@ -178,15 +179,11 @@ M.exclude_ft = {
   "TelescopeResults",
 }
 
+-- Proxy LSP name
 local proxy_lsps = {
   ["null-ls"] = true,
+  ["ast_grep"] = true,
   ["efm"] = true,
-  ["emmet_language_server"] = true,
-  ["emmet_ls"] = true,
-  ["eslint"] = true,
-  ["cssmodule_ls"] = true,
-  ["golangci_lint_ls"] = true,
-  ["ruff_lsp"] = true,
 }
 -- Determine whether the obtained LSP is a proxy LSP
 ---@param name string
@@ -199,10 +196,8 @@ end
 ---@param name string
 ---@return string
 local function format_client_name(name)
-  return ("[%s]"):format(name)
+  return (" [%s]"):format(name)
 end
-
-local non_proxy_clients = {}
 
 -- Function to get current activated LSP name
 ---@return string
@@ -211,25 +206,90 @@ function M.get_lsp_info()
 
   local clients = vim.lsp.get_clients()
   if not clients then
-    non_proxy_clients = {}
-    clients = vim.lsp.get_clients()
+    return "No Active LSP"
   end
 
-  local cached_client = non_proxy_clients[buf_ft]
-  if cached_client then
-    return format_client_name(cached_client.name)
-  end
-
+  local lsp_names = {}
   for _, client in ipairs(clients) do
     if client.config["filetypes"] and vim.tbl_contains(client.config["filetypes"], buf_ft) then
       if M.not_proxy_lsp(client.name) then
-        non_proxy_clients[buf_ft] = client
-        return format_client_name(client.name)
+        table.insert(lsp_names, client.name)
       end
     end
   end
 
-  return "No Active LSP"
+  if #lsp_names > 0 then
+    return format_client_name(table.concat(lsp_names, " "))
+  else
+    return "No Active LSP"
+  end
+end
+
+local inlay_hint = vim.lsp.inlay_hint
+
+---@param client lsp.Client
+---@param bufnr number
+-- ENable inlay hints for suported LSP
+function M.set_inlay_hints(client, bufnr)
+  if not client then
+    vim.notify_once("LSP inlay hints attached failed: nil client.", vim.log.levels.ERROR)
+    return
+  end
+
+  if client.name == "zls" then
+    vim.g.zig_fmt_autosave = 1
+  end
+
+  if client.supports_method("textDocument/inlayHint") or client.server_capabilities.inlayHintProvider then
+    inlay_hint.enable(bufnr, true)
+  end
+end
+
+function M.on_attach(client, bufnr)
+  client.server_capabilities.documentFormattingProvider = false
+  client.server_capabilities.documentRangeFormattingProvider = false
+
+  require("lsp_signature").on_attach({
+    bind = true,
+    handler_opts = {
+      border = "single",
+    },
+  }, bufnr)
+
+  M.set_inlay_hints(client, bufnr)
+
+  M.load_mappings("lspconfig", { buffer = bufnr })
+
+  vim.api.nvim_set_option_value("formatexpr", "v:lua.require'conform'.formatexpr()", { buf = bufnr })
+  vim.api.nvim_set_option_value("omnifunc", "v:lua.vim.lsp.omnifunc", { buf = bufnr })
+  vim.api.nvim_set_option_value("tagfunc", "v:lua.vim.lsp.tagfunc", { buf = bufnr })
+end
+
+M.capabilities = vim.lsp.protocol.make_client_capabilities()
+
+M.capabilities.textDocument.completion.completionItem = {
+  documentationFormat = { "markdown", "plaintext" },
+  snippetSupport = true,
+  preselectSupport = true,
+  insertReplaceSupport = true,
+  labelDetailsSupport = true,
+  deprecatedSupport = true,
+  commitCharactersSupport = true,
+  tagSupport = { valueSet = { 1 } },
+  resolveSupport = {
+    properties = {
+      "documentation",
+      "detail",
+      "additionalTextEdits",
+    },
+  },
+}
+
+function M.default_config()
+  return {
+    on_attach = M.on_attach,
+    capabilities = M.capabilities,
+  }
 end
 
 return M
