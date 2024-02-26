@@ -2,6 +2,9 @@ local opts = { noremap = true, silent = true }
 
 local keymap = vim.keymap.set
 
+local ts_builtin = require("telescope.builtin")
+local ts_themes = require("telescope.themes")
+
 -- Remap space as leader key
 keymap("", "<space>", "<nop>", opts)
 vim.g.mapleader = " "
@@ -118,14 +121,19 @@ M.lspconfig = {
   n = {
     ["gD"] = {
       function()
-        vim.lsp.buf.declaration()
+        vim.lsp.buf.declaration({ reuse_win = true })
       end,
       "LSP declaration",
     },
 
     ["gd"] = {
       function()
-        require("telescope.builtin").lsp_definitions(require("telescope.themes").get_cursor())
+        if vim.bo.filetype == "cs" then
+          -- vim.lsp.buf.definition({ reuse_win = true })
+          require("omnisharp_extended").telescope_lsp_definitions()
+        else
+          ts_builtin.lsp_definitions(ts_themes.get_cursor({ reuse_win = true }))
+        end
       end,
       "LSP definition",
     },
@@ -139,12 +147,12 @@ M.lspconfig = {
 
     ["gi"] = {
       function()
-        require("telescope.builtin").lsp_implementations(require("telescope.themes").get_cursor())
+        ts_builtin.lsp_implementations(ts_themes.get_cursor({ reuse_win = true }))
       end,
       "LSP implementation",
     },
 
-    ["<leader>ls"] = {
+    ["gK"] = {
       function()
         vim.lsp.buf.signature_help()
       end,
@@ -153,7 +161,7 @@ M.lspconfig = {
 
     ["<leader>D"] = {
       function()
-        require("telescope.builtin").lsp_type_definitions(require("telescope.themes").get_cursor())
+        ts_builtin.lsp_type_definitions(ts_themes.get_cursor({ reuse_win = true }))
       end,
       "LSP definition type",
     },
@@ -165,9 +173,23 @@ M.lspconfig = {
       "LSP code action",
     },
 
+    ["<leader>cA"] = {
+      function()
+        vim.lsp.buf.code_action({
+          context = {
+            only = {
+              "source",
+            },
+            diagnostics = {},
+          },
+        })
+      end,
+      "Source Action",
+    },
+
     ["gr"] = {
       function()
-        require("telescope.builtin").lsp_references(require("telescope.themes").get_cursor())
+        ts_builtin.lsp_references(ts_themes.get_cursor({ reuse_win = true }))
       end,
       "LSP references",
     },

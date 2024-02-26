@@ -202,6 +202,9 @@ local plugins_list = {
     end,
   },
 
+  -- { "Decodetalkers/csharpls-extended-lsp.nvim", ft = { "cs" } },
+  { "Hoffs/omnisharp-extended-lsp.nvim", ft = { "cs" } },
+
   {
     -- "numiras/semshi",
     "wookayin/semshi", -- use a maintained fork
