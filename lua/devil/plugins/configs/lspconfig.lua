@@ -227,6 +227,22 @@ local jsonls = {
   },
 }
 
+-- tailwindcss, tailwindcss's offical lsp. https://github.com/tailwindlabs/tailwindcss-intellisense
+local tailwindcss = {
+  root_dir = function(fname)
+    return lsp_util.root_pattern(
+      "tailwind.config.js",
+      "tailwind.config.cjs",
+      "tailwind.config.mjs",
+      "tailwind.config.ts",
+      "postcss.config.js",
+      "postcss.config.cjs",
+      "postcss.config.mjs",
+      "postcss.config.ts"
+    )(fname) or lsp_util.find_git_ancestor(fname)
+  end,
+}
+
 -- yaml-language-server, redhat provided lsp. https://github.com/redhat-developer/yaml-language-server
 local yamlls = {
   settings = {
@@ -274,6 +290,7 @@ local lsp_configs = {
   ["jsonls"] = jsonls,
   ["lua_ls"] = lua_ls,
   ["pyright"] = pyright,
+  ["tailwindcss"] = tailwindcss,
   ["yamlls"] = yamlls,
   ["zls"] = zls,
 }
