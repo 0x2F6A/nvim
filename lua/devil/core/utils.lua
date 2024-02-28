@@ -229,7 +229,7 @@ local inlay_hint = vim.lsp.inlay_hint
 
 ---@param client lsp.Client
 ---@param bufnr number
--- ENable inlay hints for suported LSP
+-- Enable inlay hints for suported LSP
 function M.set_inlay_hints(client, bufnr)
   if not client then
     vim.notify_once("LSP inlay hints attached failed: nil client.", vim.log.levels.ERROR)
@@ -245,6 +245,8 @@ function M.set_inlay_hints(client, bufnr)
   end
 end
 
+---@param client lsp.Client
+---@param bufnr number
 function M.on_attach(client, bufnr)
   client.server_capabilities.documentFormattingProvider = false
   client.server_capabilities.documentRangeFormattingProvider = false
@@ -290,6 +292,13 @@ function M.default_config()
     on_attach = M.on_attach,
     capabilities = M.capabilities,
   }
+end
+
+---@param lsp_name string
+---@param lsp_config table
+-- Setup user's lsp custom configs
+function M.setup_custom_settings(lsp_name, lsp_config)
+  require("lspconfig")[lsp_name].setup(merge_tb("force", M.default_config(), lsp_config))
 end
 
 return M

@@ -10,7 +10,7 @@ require("mason-lspconfig").setup({
 -- local mason_registry = require("mason-registry")
 -- local tsserver_path = mason_registry.get_package("typescript-language-server"):get_install_path()
 
-local merge_tb = vim.tbl_deep_extend
+-- local merge_tb = vim.tbl_deep_extend
 local default_config = utils.default_config
 
 local noconfig_servers = {
@@ -40,43 +40,7 @@ for _, server in pairs(noconfig_servers) do
   lspconfig[server].setup(default_config())
 end
 
-local runtime_path = vim.split(package.path, ";", {})
-table.insert(runtime_path, "lua/?.lua")
-table.insert(runtime_path, "lua/>/init.lua")
-
-require("neodev").setup()
-lspconfig.lua_ls.setup(merge_tb("force", default_config(), {
-  settings = {
-    Lua = {
-      runtime = {
-        version = "LuaJIT",
-        path = runtime_path,
-      },
-      diagnostics = {
-        globals = { "vim" },
-      },
-      workspace = {
-        library = {
-          [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-          [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
-          [vim.fn.stdpath("data") .. "/lazy/lazy.nvim/lua/lazy"] = true,
-        },
-        maxPreload = 100000,
-        preloadFileSize = 10000,
-      },
-      hint = {
-        enable = true,
-        arrayIndex = "Auto",
-        await = true,
-        paramName = "All",
-        paramType = true,
-        semicolon = "SameLine",
-        setType = false,
-      },
-    },
-  },
-}))
-
+-- clangd, clang official lsp. https://github.com/clangd/clangd
 local clangd_capabilities = utils.capabilities
 clangd_capabilities.offsetEncoding = { "utf-16" } ---@diagnostic disable-line
 lspconfig.clangd.setup({
@@ -116,7 +80,46 @@ lspconfig.clangd.setup({
   },
 })
 
-lspconfig.gopls.setup(merge_tb("force", default_config(), {
+-- lua-language-server(sumneko). https://github.com/LuaLS/lua-language-server
+local runtime_path = vim.split(package.path, ";", {})
+table.insert(runtime_path, "lua/?.lua")
+table.insert(runtime_path, "lua/>/init.lua")
+
+require("neodev").setup()
+local lua_ls = {
+  settings = {
+    Lua = {
+      runtime = {
+        version = "LuaJIT",
+        path = runtime_path,
+      },
+      diagnostics = {
+        globals = { "vim" },
+      },
+      workspace = {
+        library = {
+          [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+          [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
+          [vim.fn.stdpath("data") .. "/lazy/lazy.nvim/lua/lazy"] = true,
+        },
+        maxPreload = 100000,
+        preloadFileSize = 10000,
+      },
+      hint = {
+        enable = true,
+        arrayIndex = "Auto",
+        await = true,
+        paramName = "All",
+        paramType = true,
+        semicolon = "SameLine",
+        setType = false,
+      },
+    },
+  },
+}
+
+-- gopls, golang offical lsp. https://github.com/golang/tools/blob/master/gopls
+local gopls = {
   settings = {
     gopls = {
       experimentalPostfixCompletions = true,
@@ -155,9 +158,10 @@ lspconfig.gopls.setup(merge_tb("force", default_config(), {
       semanticTokens = true,
     },
   },
-}))
+}
 
-lspconfig.zls.setup(merge_tb("force", default_config(), {
+-- zls, zigtools provide's lsp. https://github.com/zigtools/zls
+local zls = {
   settings = {
     zls = {
       enable_snippets = true,
@@ -190,9 +194,10 @@ lspconfig.zls.setup(merge_tb("force", default_config(), {
       completions_with_replace = true,
     },
   },
-}))
+}
 
-lspconfig.eslint.setup(merge_tb("force", default_config(), {
+-- eslint. eslint official lsp. https://github.com/eslint/eslint
+local eslint = {
   root_dir = function(fname)
     local root_file = lsp_util.insert_package_json({
       ".eslintrc",
@@ -207,9 +212,10 @@ lspconfig.eslint.setup(merge_tb("force", default_config(), {
 
     return lsp_util.root_pattern(unpack(root_file))(fname)
   end,
-}))
+}
 
-lspconfig.jsonls.setup(merge_tb("force", default_config(), {
+-- jsonls, the popular json lsp. https://github.com/json-transformations/jsonls
+local jsonls = {
   settings = {
     json = {
       schemas = require("schemastore").json.schemas({
@@ -219,9 +225,10 @@ lspconfig.jsonls.setup(merge_tb("force", default_config(), {
       format = { enable = true },
     },
   },
-}))
+}
 
-lspconfig.yamlls.setup(merge_tb("force", default_config(), {
+-- yaml-language-server, redhat provided lsp. https://github.com/redhat-developer/yaml-language-server
+local yamlls = {
   settings = {
     yaml = {
       schemaStore = {
@@ -234,9 +241,10 @@ lspconfig.yamlls.setup(merge_tb("force", default_config(), {
       schemas = require("schemastore").yaml.schemas(),
     },
   },
-}))
+}
 
-lspconfig.pyright.setup(merge_tb("force", default_config(), {
+-- pyright, microsoft provided lsp. https://github.com/microsoft/pyright
+local pyright = {
   settings = {
     python = {
       analysis = {
@@ -246,16 +254,10 @@ lspconfig.pyright.setup(merge_tb("force", default_config(), {
       },
     },
   },
-}))
+}
 
---[[
-lspconfig.omnisharp.setup(merge_tb("force", default_config(), {
-  handlers = {
-    ["textDocument/definition"] = require("omnisharp_extended").handler,
-  },
-}))
-]]
-lspconfig.csharp_ls.setup(merge_tb("force", default_config(), {
+-- csharp-language-server, a omnisharp lsp's replacement(roslyn-based). https://github.com/razzmatazz/csharp-language-server
+local csharp_ls = {
   handlers = {
     ["textDocument/definition"] = require("csharpls_extended").handler,
     ["textDocument/typeDefinition"] = require("csharpls_extended").handler,
@@ -263,9 +265,32 @@ lspconfig.csharp_ls.setup(merge_tb("force", default_config(), {
   init_options = {
     AutomaticWorkspaceInit = true,
   },
-}))
+}
+
+local lsp_configs = {
+  ["csharp_ls"] = csharp_ls,
+  ["eslint"] = eslint,
+  ["gopls"] = gopls,
+  ["jsonls"] = jsonls,
+  ["lua_ls"] = lua_ls,
+  ["pyright"] = pyright,
+  ["yamlls"] = yamlls,
+  ["zls"] = zls,
+}
+
+for lsp_name, lsp_config in pairs(lsp_configs) do
+  utils.setup_custom_settings(lsp_name, lsp_config)
+end
 
 -- ************************************************************************************************
+--[[
+lspconfig.omnisharp.setup(merge_tb("force", default_config(), {
+  handlers = {
+    ["textDocument/definition"] = require("omnisharp_extended").handler,
+  },
+}))
+]]
+
 --[[
 lspconfig.tsserver.setup(merge_tb("force", default_config(), {
   settings = {
