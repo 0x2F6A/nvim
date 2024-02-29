@@ -179,6 +179,34 @@ M.exclude_ft = {
   "TelescopeResults",
 }
 
+-- HTML and HTML Templates
+M.html_files = {
+  "aspnetcorerazor", -- *.cshtml (CSharp - ASP.Net)
+  "astro", -- *.astro (JavaScript - Astro SFC)
+  "blade", -- *.blade.php (PHP - Laravel)
+  "html",
+  "edge", -- *.edge (NodeJS optional)
+  "ejs", -- *.ejs (Embedded JavaScript templating)
+  "eruby", -- *.html.erb (Ruby - Rails)
+  "gohtmltmpl", -- *.gohtml (Go offical)
+  "haml", -- *.haml (Rails optional)
+  "handlebars", -- *.html.hbs (Rust - Rocket)
+  "heex", -- *.heex (Elixir - Phoenix)
+  "htmldjango", -- (Python - Django)
+  "leaf", -- *.leaf (Swift - Vapor)
+  "liquid", -- *.liquid (Ruby optional)
+  "mustache", -- (Ruby optional)
+  "njk", -- (Nunjucks - NodeJS optional)
+  "php",
+  "pug", -- *.pug (NodeJS optional)
+  "razor", -- *.razor (CSharp - Blazor)
+  "slim", -- *.slim (Ruby optional)
+  "svelte", -- *.svelte (JavaScript - Svelte SFC)
+  "templ",
+  "twig", -- *.twig (PHP - Symfony)
+  "vue", -- *.vue (JavaScript - Vue SFC)
+}
+
 -- Proxy LSP name
 local proxy_lsps = {
   ["null-ls"] = true,
