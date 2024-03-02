@@ -1,5 +1,6 @@
 return {
   on_attach = require("devil.core.utils").on_attach,
+  single_file_support = not (vim.fn.filereadable(("%s/deno.json"):format(vim.fn.getcwd())) == 1),
   settings = {
     -- spawn additional tsserver instance to calculate diagnostics on it
     separate_diagnostic_server = true,

@@ -18,6 +18,7 @@ local noconfig_servers = {
   "bashls",
   "cssls",
   "cssmodules_ls",
+  "denols",
   "elixirls",
   "emmet_language_server",
   "html",
