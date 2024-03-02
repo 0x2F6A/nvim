@@ -18,7 +18,6 @@ local noconfig_servers = {
   "bashls",
   "cssls",
   "cssmodules_ls",
-  "denols",
   "elixirls",
   "emmet_language_server",
   "html",
@@ -41,7 +40,7 @@ for _, server in pairs(noconfig_servers) do
   lspconfig[server].setup(default_config())
 end
 
--- clangd, clang official lsp. https://github.com/clangd/clangd
+-- clangd, clang offical lsp. https://github.com/clangd/clangd
 local clangd_capabilities = utils.capabilities
 clangd_capabilities.offsetEncoding = { "utf-16" } ---@diagnostic disable-line
 lspconfig.clangd.setup({
@@ -197,7 +196,31 @@ local zls = {
   },
 }
 
--- eslint. eslint official lsp. https://github.com/eslint/eslint
+-- denols. deno offical lsp. https://github.com/denoland/deno/blob/main/cli/lsp
+local denols = {
+  settings = {
+    deno = {
+      enable = true,
+      suggest = {
+        imports = {
+          hosts = {
+            ["https://deno.land"] = true,
+          },
+        },
+      },
+      inlayHints = {
+        parameterNames = { enabled = "all", suppressWhenArgumentMatchesName = true },
+        parameterTypes = { enabled = true },
+        variableTypes = { enabled = true, suppressWhenTypeMatchesName = true },
+        propertyDeclarationTypes = { enabled = true },
+        functionLikeReturnTypes = { enable = true },
+        enumMemberValues = { enabled = true },
+      },
+    },
+  },
+}
+
+-- eslint. eslint offical lsp. https://github.com/eslint/eslint
 local eslint = {
   root_dir = function(fname)
     local root_file = lsp_util.insert_package_json({
@@ -286,6 +309,7 @@ local csharp_ls = {
 
 local lsp_configs = {
   ["csharp_ls"] = csharp_ls,
+  ["denols"] = denols,
   ["eslint"] = eslint,
   ["gopls"] = gopls,
   ["jsonls"] = jsonls,
