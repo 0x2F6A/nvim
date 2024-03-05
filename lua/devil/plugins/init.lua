@@ -93,6 +93,8 @@ local plugins_list = {
     dependencies = {
       "williamboman/mason-lspconfig.nvim",
       { "jay-babu/mason-nvim-dap.nvim", cmd = { "DapInstall", "DapUninstall" } },
+      "zapling/mason-conform.nvim",
+      "rshkarin/mason-nvim-lint",
     },
     cmd = { "Mason", "MasonInstall", "MasonInstallAll", "MasonUpdate" },
     opts = function()
