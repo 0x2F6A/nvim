@@ -3,7 +3,6 @@ local util = require("conform.util")
 local options = {
   -- Map of filetype to formatters
   formatters_by_ft = {
-    bash = { "shfmt" },
     c = { "clang_format" },
     clojure = { "zprint" },
     cmake = { "cmake_format" },
@@ -29,15 +28,9 @@ local options = {
         return { "isort", "black" }
       end
     end,
-    ruby = { "standardrb" },
-    rust = { "rustfmt" },
     scala = { "scalafmt" },
-    sh = { "shfmt" },
-    toml = { "taplo" },
     typescript = { "prettier" },
     typescriptreact = { "prettier" },
-    xml = { "xmlformat" },
-    yaml = { "yamlfmt" },
     zig = { "zigfmt" },
     -- Use the "*" filetype to run formatters on all filetypes.
     ["*"] = { "codespell" },

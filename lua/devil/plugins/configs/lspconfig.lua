@@ -20,6 +20,7 @@ local noconfig_servers = {
   "cssmodules_ls",
   "elixirls",
   "emmet_language_server",
+  "golangci_lint_ls",
   "html",
   "lemminx",
   "marksman",
