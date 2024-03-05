@@ -40,7 +40,7 @@ for _, server in pairs(noconfig_servers) do
   lspconfig[server].setup(default_config())
 end
 
--- clangd, clang offical lsp. https://github.com/clangd/clangd
+-- clangd, clang official lsp. https://github.com/clangd/clangd
 local clangd_capabilities = utils.capabilities
 clangd_capabilities.offsetEncoding = { "utf-16" } ---@diagnostic disable-line
 lspconfig.clangd.setup({
@@ -118,7 +118,7 @@ local lua_ls = {
   },
 }
 
--- gopls, golang offical lsp. https://github.com/golang/tools/blob/master/gopls
+-- gopls, golang official lsp. https://github.com/golang/tools/blob/master/gopls
 local gopls = {
   settings = {
     gopls = {
@@ -196,7 +196,7 @@ local zls = {
   },
 }
 
--- denols. deno offical lsp. https://github.com/denoland/deno/blob/main/cli/lsp
+-- denols. deno official lsp. https://github.com/denoland/deno/blob/main/cli/lsp
 local denols = {
   settings = {
     deno = {
@@ -220,7 +220,7 @@ local denols = {
   },
 }
 
--- eslint. eslint offical lsp. https://github.com/eslint/eslint
+-- eslint. eslint official lsp. https://github.com/eslint/eslint
 local eslint = {
   root_dir = function(fname)
     local root_file = lsp_util.insert_package_json({
@@ -251,7 +251,7 @@ local jsonls = {
   },
 }
 
--- tailwindcss, tailwindcss's offical lsp. https://github.com/tailwindlabs/tailwindcss-intellisense
+-- tailwindcss, tailwindcss's official lsp. https://github.com/tailwindlabs/tailwindcss-intellisense
 local tailwindcss = {
   root_dir = function(fname)
     return lsp_util.root_pattern(
@@ -307,12 +307,26 @@ local csharp_ls = {
   },
 }
 
+-- kotlin-language-server, a community's kotlin lsp. https://github.com/fwcd/kotlin-language-server
+local kotlin_language_server = {
+  settings = {
+    kotlin = {
+      hints = {
+        typeHints = true,
+        parameterHints = true,
+        chaineHints = true,
+      },
+    },
+  },
+}
+
 local lsp_configs = {
   ["csharp_ls"] = csharp_ls,
   ["denols"] = denols,
   ["eslint"] = eslint,
   ["gopls"] = gopls,
   ["jsonls"] = jsonls,
+  ["kotlin_language_server"] = kotlin_language_server,
   ["lua_ls"] = lua_ls,
   ["pyright"] = pyright,
   ["tailwindcss"] = tailwindcss,
