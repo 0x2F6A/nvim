@@ -2,6 +2,7 @@ local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
 
 local common = augroup("common", { clear = true })
+local prog = augroup("prog", { clear = true })
 
 autocmd("TermOpen", {
   group = common,
@@ -27,7 +28,7 @@ autocmd("FileType", {
 })
 
 autocmd("FileType", {
-  group = common,
+  group = prog,
   pattern = { "cs", "java", "kotlin", "php" },
   desc = "Use 4 spaces indent for some filetypes",
   callback = function()

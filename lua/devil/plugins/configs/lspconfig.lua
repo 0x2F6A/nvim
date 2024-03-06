@@ -26,7 +26,6 @@ local noconfig_servers = {
   "marksman",
   "neocmake",
   "nil_ls",
-  "phpactor",
   "ruff_lsp",
   "serve_d",
   "slint_lsp",
@@ -300,6 +299,15 @@ local pyright = {
   },
 }
 
+-- phpactor, a open source PHP lsp. https://github.com/phpactor/phpactor
+local phpactor = {
+  init_options = {
+    ["language_server_worse_reflection.inlay_hints.enable"] = true,
+    ["language_server_worse_reflection.inlay_hints.types"] = true,
+    ["language_server_worse_reflection.inlay_hints.params"] = true,
+  },
+}
+
 -- csharp-language-server, a omnisharp lsp's replacement(roslyn-based). https://github.com/razzmatazz/csharp-language-server
 local csharp_ls = {
   handlers = {
@@ -332,6 +340,7 @@ local lsp_configs = {
   ["jsonls"] = jsonls,
   ["kotlin_language_server"] = kotlin_language_server,
   ["lua_ls"] = lua_ls,
+  ["phpactor"] = phpactor,
   ["pyright"] = pyright,
   ["tailwindcss"] = tailwindcss,
   ["yamlls"] = yamlls,
