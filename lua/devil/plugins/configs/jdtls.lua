@@ -135,16 +135,16 @@ local opts = {
         updateBuildConfiguration = "interactive",
         runtimes = {
           {
-            name = "JavaSE-11",
-            path = find_jvm_path("11"),
+            name = "JavaSE-21",
+            path = find_jvm_path("21"),
           },
           {
             name = "JavaSE-17",
             path = find_jvm_path("17"),
           },
           {
-            name = "JavaSE-21",
-            path = find_jvm_path("21"),
+            name = "JavaSE-11",
+            path = find_jvm_path("11"),
           },
         },
       },
