@@ -461,7 +461,7 @@ local plugins_list = {
   {
     "dgagn/diagflow.nvim",
     lazy = true,
-    event = "LspAttach", -- This is what I use personnally and it works great
+    event = "LspAttach", -- This is what I use personally and it works great
     opts = {
       scope = "line",
       format = function(diagnostic)
@@ -641,7 +641,11 @@ local plugins_list = {
 
   {
     "folke/trouble.nvim",
-    cmd = { "TroubleToggle", "TroubleClose", "Trouble" },
+    branch = "dev",
+    cmd = { "Trouble" },
+    init = function()
+      utils.load_mappings("trouble")
+    end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
     opts = {},
   },

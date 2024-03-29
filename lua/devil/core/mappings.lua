@@ -389,7 +389,7 @@ M.gitsigns = {
         require("gitsigns").toggle_numhl()
         require("gitsigns").toggle_linehl()
       end,
-      "Toggle gitsigns line hightlight",
+      "Toggle gitsigns line highlight",
     },
     ["<leader>tw"] = {
       function()
@@ -420,9 +420,9 @@ M.bufferline = {
     ["<A-9>"] = { "<CMD>BufferLineGoToBuffer 9<CR>", "Go to 9 buffer" },
     ["<A-0>"] = { "<CMD>BufferLineGoToBuffer -1<CR>", "Go to first buffer" },
     ["<A-p>"] = { "<CMD>BufferLineTogglePin<CR>", "Toggle pinned buffer" },
-    ["<Space>bt"] = { "<Cmd>BufferLineSortByTabs<CR>", "Sory buffers by tabs" },
-    ["<Space>bd"] = { "<Cmd>BufferLineSortByDirectory<CR>", "Sort buffers by directories" },
-    ["<Space>be"] = { "<Cmd>BufferLineSortByExtension<CR>", "Sort buffers by extensions" },
+    ["<Space>bt"] = { "<CMD>BufferLineSortByTabs<CR>", "Sory buffers by tabs" },
+    ["<Space>bd"] = { "<CMD>BufferLineSortByDirectory<CR>", "Sort buffers by directories" },
+    ["<Space>be"] = { "<CMD>BufferLineSortByExtension<CR>", "Sort buffers by extensions" },
     ["<leader>bh"] = { "<CMD>BufferLineCloseLeft<CR>", "Close left buffer" },
     ["<leader>bl"] = { "<CMD>BufferLineCloseRight<CR>", "Close right buffer" },
     ["<leader>bp"] = { "<CMD>BufferLinePick<CR>", "Pick buffer" },
@@ -511,6 +511,21 @@ M.dap = {
         require("dapui").eval()
       end,
       "Popups dapUI eval",
+    },
+  },
+}
+
+M.trouble = {
+  plugin = true,
+
+  n = {
+    ["<leader>xx"] = {
+      "<CMD>Trouble diagnostics toggle<CR>",
+      "Diagnostics (Trouble)",
+    },
+    ["<leader>xX"] = {
+      "<CMD>Trouble diagnostics toggle filter.buf=0<CR>",
+      "",
     },
   },
 }
