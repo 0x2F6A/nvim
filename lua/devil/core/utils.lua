@@ -188,7 +188,7 @@ M.html_files = {
   "edge", -- *.edge (NodeJS optional)
   "ejs", -- *.ejs (Embedded JavaScript templating)
   "eruby", -- *.html.erb (Ruby - Rails)
-  "gohtmltmpl", -- *.gohtml (Go offical)
+  "gohtmltmpl", -- *.gohtml (Go official)
   "haml", -- *.haml (Rails optional)
   "handlebars", -- *.html.hbs (Rust - Rocket)
   "heex", -- *.heex (Elixir - Phoenix)
@@ -257,7 +257,7 @@ local inlay_hint = vim.lsp.inlay_hint
 
 ---@param client lsp.Client
 ---@param bufnr number
--- Enable inlay hints for suported LSP
+-- Enable inlay hints for supported LSP
 function M.set_inlay_hints(client, bufnr)
   if not client then
     vim.notify_once("LSP inlay hints attached failed: nil client.", vim.log.levels.ERROR)
@@ -269,7 +269,7 @@ function M.set_inlay_hints(client, bufnr)
   end
 
   if client.supports_method("textDocument/inlayHint") or client.server_capabilities.inlayHintProvider then
-    inlay_hint.enable(bufnr, true)
+    inlay_hint.enable(true, { bufnr = bufnr })
   end
 end
 
