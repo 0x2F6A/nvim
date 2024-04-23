@@ -308,6 +308,7 @@ local plugins_list = {
     "nvim-neotest/neotest",
     dependencies = {
       "antoinemadec/FixCursorHold.nvim",
+      "nvim-neotest/nvim-nio",
       "nvim-neotest/neotest-python",
       "nvim-neotest/neotest-jest",
       "nvim-neotest/neotest-plenary",
