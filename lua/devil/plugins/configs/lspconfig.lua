@@ -35,7 +35,6 @@ local noconfig_servers = {
   "tailwindcss",
   "taplo",
   "vala_ls",
-  "volar",
   "vimls",
 }
 
@@ -259,7 +258,7 @@ local svelte = {
   settings = {
     typescript = {
       inlayHints = {
-        parameterNames = { enabled = 'all' },
+        parameterNames = { enabled = "all" },
         parameterTypes = { enabled = true },
         variableTypes = { enabled = true },
         propertyDeclarationTypes = { enabled = true },
@@ -267,7 +266,21 @@ local svelte = {
         enumMemberValues = { enabled = true },
       },
     },
-  }
+  },
+}
+
+-- volar, vue.js official lsp. https://github.com/vuejs/language-tools
+local volar = {
+  settings = {
+    vue = {
+      inlayHints = {
+        inlineHandlerLeading = true,
+        missingProps = true,
+        optionsWrapper = true,
+        vBindShorthand = true,
+      },
+    },
+  },
 }
 
 -- tailwindcss, tailwindcss's official lsp. https://github.com/tailwindlabs/tailwindcss-intellisense
@@ -358,8 +371,9 @@ local lsp_configs = {
   ["lua_ls"] = lua_ls,
   ["phpactor"] = phpactor,
   ["pyright"] = pyright,
-  ['svelte'] = svelte,
+  ["svelte"] = svelte,
   ["tailwindcss"] = tailwindcss,
+  ["volar"] = volar,
   ["yamlls"] = yamlls,
   ["zls"] = zls,
 }
