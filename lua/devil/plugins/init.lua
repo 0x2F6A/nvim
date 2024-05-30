@@ -459,7 +459,7 @@ local plugins_list = {
     end,
   },
 
-  {
+  --[[{
     "dgagn/diagflow.nvim",
     lazy = true,
     event = "LspAttach", -- This is what I use personally and it works great
@@ -473,7 +473,15 @@ local plugins_list = {
       end,
     },
   },
+  ]]
 
+  {
+    "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+    event = "LspAttach",
+    config = function()
+      require("lsp_lines").setup()
+    end,
+  },
   {
     "nvim-neo-tree/neo-tree.nvim",
     lazy = false,
