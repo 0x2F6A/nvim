@@ -254,6 +254,22 @@ local jsonls = {
   },
 }
 
+-- svelte-language-server, sveltejs official lsp. https://github.com/sveltejs/language-tools
+local svelte = {
+  settings = {
+    typescript = {
+      inlayHints = {
+        parameterNames = { enabled = 'all' },
+        parameterTypes = { enabled = true },
+        variableTypes = { enabled = true },
+        propertyDeclarationTypes = { enabled = true },
+        functionLikeReturnTypes = { enabled = true },
+        enumMemberValues = { enabled = true },
+      },
+    },
+  }
+}
+
 -- tailwindcss, tailwindcss's official lsp. https://github.com/tailwindlabs/tailwindcss-intellisense
 local tailwindcss = {
   root_dir = function(fname)
@@ -342,6 +358,7 @@ local lsp_configs = {
   ["lua_ls"] = lua_ls,
   ["phpactor"] = phpactor,
   ["pyright"] = pyright,
+  ['svelte'] = svelte,
   ["tailwindcss"] = tailwindcss,
   ["yamlls"] = yamlls,
   ["zls"] = zls,
