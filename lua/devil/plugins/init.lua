@@ -341,21 +341,22 @@ local plugins_list = {
     end,
   },
 
-  -- load luasnips + cmp related in insert mode only
+  -- load cmp related in insert mode only
   {
     "hrsh7th/nvim-cmp",
     event = { "InsertEnter" },
     dependencies = {
+      -- snippet plugin
       {
-        -- snippet plugin
-        "L3MON4D3/LuaSnip",
+        "garymjr/nvim-snippets",
         dependencies = "rafamadriz/friendly-snippets",
-        opts = { history = true, updateevents = "TextChanged,TextChangedI" },
-        config = function(_, opts)
-          require("devil.plugins.configs.others").luasnip(opts)
+        config = function()
+          require("snippets").setup({
+            create_cmp_source = true,
+            friendly_snippets = true,
+          })
         end,
       },
-
       -- autopairing of (){}[] etc
       {
         "windwp/nvim-autopairs",
@@ -382,7 +383,6 @@ local plugins_list = {
         "hrsh7th/cmp-nvim-lua",
         "hrsh7th/cmp-emoji",
         "FelipeLema/cmp-async-path",
-        "saadparwaiz1/cmp_luasnip",
         "petertriho/cmp-git",
         "Dosx001/cmp-commit",
         "ray-x/cmp-treesitter",

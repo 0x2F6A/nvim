@@ -1,5 +1,4 @@
 local cmp = require("cmp")
-local luasnip = require("luasnip")
 local kind_icons = require("devil.core.utils").kind_icons
 
 local has_words_before = function()
@@ -44,8 +43,8 @@ local formatting_style = {
       vim_item.menu = ({
         buffer = "[Buf]",
         nvim_lsp = "[LSP]",
-        luasnip = "[LuaSnip]",
         nvim_lua = "[API]",
+        snippets = "[Snip]",
         latex_symbols = "[LaTeX]",
         path = "[Path]",
         emoji = "[Emoji]",
@@ -85,27 +84,27 @@ local cmp_mapping = {
   ["<C-k>"] = cmp.mapping.select_prev_item(),
   -- next
   ["<C-j>"] = cmp.mapping.select_next_item(),
+
   ["<Tab>"] = cmp.mapping(function(fallback)
     if cmp.visible() then
       cmp.select_next_item()
-      -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
-      -- that way you will only jump inside the snippet region
-    elseif luasnip.expand_or_jumpable() then
-      luasnip.expand_or_jump()
+    elseif vim.snippet.active({ direction = 1 }) then
+      vim.schedule(function()
+        vim.snippet.jump(1)
+      end)
     elseif has_words_before() then
       cmp.complete()
     else
-      fallback()
+      fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
     end
   end, { "i", "s" }),
-
-  ["<S-Tab>"] = cmp.mapping(function(fallback)
+  ["<S-Tab>"] = cmp.mapping(function()
     if cmp.visible() then
       cmp.select_prev_item()
-    elseif luasnip.jumpable(-1) then
-      luasnip.jump(-1)
-    else
-      fallback()
+    elseif vim.snippet.active({ direction = -1 }) then
+      vim.schedule(function()
+        vim.snippet.jump(1)
+      end)
     end
   end, { "i", "s" }),
 }
@@ -151,15 +150,16 @@ local options = {
       winhighlight = "Normal:CmpDoc",
     },
   },
+
   snippet = {
     expand = function(args)
-      require("luasnip").lsp_expand(args.body)
+      vim.snippet.expand(args.body)
     end,
   },
 
   formatting = formatting_style,
 
-  mapping = cmp_mapping,
+  mapping = cmp.mapping.preset.insert(cmp_mapping),
 
   sources = cmp.config.sources({
     {
@@ -172,7 +172,7 @@ local options = {
         return true
       end,
     },
-    { name = "luasnip", option = { use_show_condition = false } },
+    { name = "snippets", max_item_count = 10 },
     { name = "nvim_lua" },
     { name = "buffer", keywords = 3 },
     { name = "async_path" },
