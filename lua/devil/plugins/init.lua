@@ -125,7 +125,7 @@ local plugins_list = {
       -- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
       -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
       -- See the full "keymap" documentation for information on defining your own keymap.
-      keymap = { preset = "default" },
+      keymap = { preset = "super-tab" },
 
       appearance = {
         -- Sets the fallback highlight groups to nvim-cmp's highlight groups
@@ -140,6 +140,21 @@ local plugins_list = {
       -- elsewhere in your config, without redefining it, due to `opts_extend`
       sources = {
         default = { "lsp", "path", "snippets", "buffer" },
+        cmdline = {},
+      },
+      completion = {
+        menu = {
+          -- Don't automatically show the completion menu
+          auto_show = true,
+
+          -- nvim-cmp style menu
+          draw = {
+            columns = {
+              { "label", "label_description", gap = 1 },
+              { "kind_icon", "kind", gap = 1 },
+            },
+          },
+        },
       },
     },
     opts_extend = { "sources.default" },
