@@ -110,9 +110,39 @@ local plugins_list = {
     init = function()
       require("devil.core.utils").lazy_load("nvim-lspconfig")
     end,
+    dependencies = { "saghen/blink.cmp" },
     config = function()
       require("devil.plugins.configs.lspconfig")
     end,
+  },
+
+  {
+    "saghen/blink.cmp",
+    dependencies = "rafamadriz/friendly-snippets",
+    version = "*",
+    opts = {
+      -- 'default' for mappings similar to built-in completion
+      -- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
+      -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
+      -- See the full "keymap" documentation for information on defining your own keymap.
+      keymap = { preset = "default" },
+
+      appearance = {
+        -- Sets the fallback highlight groups to nvim-cmp's highlight groups
+        -- Useful for when your theme doesn't support blink.cmp
+        -- Will be removed in a future release
+        use_nvim_cmp_as_default = true,
+        -- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+        -- Adjusts spacing to ensure icons are aligned
+        nerd_font_variant = "mono",
+      },
+      -- Default list of enabled providers defined so that you can extend it
+      -- elsewhere in your config, without redefining it, due to `opts_extend`
+      sources = {
+        default = { "lsp", "path", "snippets", "buffer" },
+      },
+    },
+    opts_extend = { "sources.default" },
   },
 
   {
@@ -338,59 +368,6 @@ local plugins_list = {
     end,
     config = function(_, opts)
       require("lspkind").init(opts)
-    end,
-  },
-
-  -- load cmp related in insert mode only
-  {
-    "hrsh7th/nvim-cmp",
-    event = { "InsertEnter" },
-    dependencies = {
-      -- snippet plugin
-      {
-        "garymjr/nvim-snippets",
-        dependencies = "rafamadriz/friendly-snippets",
-        config = function()
-          require("snippets").setup({
-            create_cmp_source = true,
-            friendly_snippets = true,
-          })
-        end,
-      },
-      -- autopairing of (){}[] etc
-      {
-        "windwp/nvim-autopairs",
-        opts = {
-          fast_wrap = {},
-          disable_filetype = { "TelescopePrompt", "vim" },
-        },
-        config = function(_, opts)
-          require("nvim-autopairs").setup(opts)
-
-          -- setup cmp for autopairs
-          local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-          require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
-        end,
-      },
-
-      -- cmp sources plugins
-      {
-        "hrsh7th/cmp-nvim-lsp",
-        "hrsh7th/cmp-buffer",
-        "hrsh7th/cmp-calc",
-        "hrsh7th/cmp-cmdline",
-        "hrsh7th/cmp-nvim-lsp-document-symbol",
-        "hrsh7th/cmp-nvim-lua",
-        "hrsh7th/cmp-emoji",
-        "FelipeLema/cmp-async-path",
-        "petertriho/cmp-git",
-        "Dosx001/cmp-commit",
-        "ray-x/cmp-treesitter",
-        "David-Kunz/cmp-npm",
-      },
-    },
-    config = function()
-      require("devil.plugins.configs.cmp")
     end,
   },
 

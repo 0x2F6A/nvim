@@ -4,14 +4,15 @@ local lsp_util = require("lspconfig.util")
 
 require("mason-lspconfig").setup({
   automatic_installation = false,
-  ensure_installed = { "clangd", "gopls", "lua_ls", "rust_analyzer", "tsserver", "zls" },
+  ensure_installed = { "clangd", "gopls", "lua_ls", "rust_analyzer", "ts_ls", "zls" },
 })
 
 -- local mason_registry = require("mason-registry")
 -- local tsserver_path = mason_registry.get_package("typescript-language-server"):get_install_path()
 
 -- local merge_tb = vim.tbl_deep_extend
-local default_config = utils.default_config
+local default_config = utils.default_config()
+default_config.capabilities = require("blink.cmp").get_lsp_capabilities(default_config.capabilities)
 
 local noconfig_servers = {
   "angularls",
@@ -26,7 +27,7 @@ local noconfig_servers = {
   "marksman",
   "neocmake",
   "nil_ls",
-  "ruff_lsp",
+  "ruff",
   "serve_d",
   "slint_lsp",
   "solargraph",
@@ -39,11 +40,11 @@ local noconfig_servers = {
 }
 
 for _, server in pairs(noconfig_servers) do
-  lspconfig[server].setup(default_config())
+  lspconfig[server].setup(default_config)
 end
 
 -- clangd, clang official lsp. https://github.com/clangd/clangd
-local clangd_capabilities = utils.capabilities
+local clangd_capabilities = require("blink.cmp").get_lsp_capabilities(utils.capabilities)
 clangd_capabilities.offsetEncoding = { "utf-16" } ---@diagnostic disable-line
 lspconfig.clangd.setup({
   on_attach = function(client, bufnr)
