@@ -412,18 +412,6 @@ local Git = {
   },
 }
 
-local SignatureHelp = {
-  condition = conditions.lsp_attached,
-  provider = function()
-    if not pcall(require, "lsp_signature") then
-      return
-    end
-    local sig = require("lsp_signature").status_line()
-    return sig.label .. "🐼" .. sig.hint
-  end,
-  hl = { fg = "lightyellow", italic = true },
-}
-
 --[[
 local WorkDir = {
   init = function(self)
@@ -525,7 +513,6 @@ local DefaultStatusline = {
   Space,
   Diagnostics,
   Space,
-  SignatureHelp,
   Align,
   Align,
   LSPActive,
@@ -595,6 +582,36 @@ local StatusLines = {
   DefaultStatusline,
 }
 
+-------------------------------------------------------------------------
+
+local SignatureHelp = {
+  condition = conditions.lsp_attached,
+  hl = { fg = "lightyellow", italic = true },
+  flexible = 2,
+  {
+    provider = function()
+      if not pcall(require, "lsp_signature") then
+        return
+      end
+      local sig = require("lsp_signature").status_line()
+      return sig.label .. "🐼" .. sig.hint
+    end,
+  },
+}
+
+local Breadcrumbs = {
+  condition = conditions.lsp_attached,
+  flexible = 1,
+  { provider = "%{%v:lua.dropbar()%}" },
+}
+
+local WinBars = {
+  Breadcrumbs,
+  Align,
+  SignatureHelp,
+  Space,
+}
+
 -- require("heirline").load_colors(setup_colors)
 -- or pass it to config.opts.colors
 
@@ -608,6 +625,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 
 heirline.setup({
   statusline = StatusLines,
+  winbar = WinBars,
   opts = {
     colors = colors,
   },
