@@ -140,7 +140,6 @@ local plugins_list = {
       -- elsewhere in your config, without redefining it, due to `opts_extend`
       sources = {
         default = { "lsp", "path", "snippets", "buffer" },
-        cmdline = {},
       },
       completion = {
         menu = {
@@ -200,7 +199,6 @@ local plugins_list = {
   },
 
   { "b0o/schemastore.nvim", ft = { "json", "yaml" } },
-  { "p00f/clangd_extensions.nvim", ft = { "c", "cpp" } },
 
   {
     "ray-x/go.nvim",
@@ -237,84 +235,6 @@ local plugins_list = {
     "saecki/crates.nvim",
     tag = "stable",
     event = "BufRead Cargo.toml",
-    config = function()
-      require("crates").setup()
-    end,
-  },
-
-  {
-    "mfussenegger/nvim-jdtls",
-    ft = "java",
-    config = function()
-      local config = require("devil.plugins.configs.jdtls")
-
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = "java",
-        callback = function()
-          require("jdtls").start_or_attach(config)
-        end,
-        group = vim.api.nvim_create_augroup("AttachJDTLS", { clear = true }),
-      })
-    end,
-  },
-
-  {
-    "scalameta/nvim-metals",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-    ft = { "scala", "sbt", "java" },
-    opts = function()
-      return require("devil.plugins.configs.metals")
-    end,
-    config = function(self, metals_config)
-      local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = self.ft,
-        callback = function()
-          require("metals").initialize_or_attach(metals_config)
-        end,
-        group = nvim_metals_group,
-      })
-    end,
-  },
-
-  { "Decodetalkers/csharpls-extended-lsp.nvim", ft = { "cs" } },
-  -- { "Hoffs/omnisharp-extended-lsp.nvim", ft = { "cs" } },
-
-  {
-    -- "numiras/semshi",
-    "wookayin/semshi", -- use a maintained fork
-    ft = "python",
-    build = ":UpdateRemotePlugins",
-    init = function()
-      vim.cmd([[silent! runtime plugin/rplugin.vim]])
-
-      -- Disabled these features better provided by LSP or other more general plugins
-      vim.g["semshi#error_sign"] = false
-      vim.g["semshi#simplify_markup"] = false
-      vim.g["semshi#mark_selected_nodes"] = true
-      vim.g["semshi#update_delay_factor"] = 0.001
-
-      -- This autocmd must be defined in init to take effect
-      vim.api.nvim_create_autocmd({ "VimEnter", "ColorScheme" }, {
-        group = vim.api.nvim_create_augroup("SemanticHighlight", {}),
-        callback = function()
-          -- Only add style, inherit or link to the LSP's colors
-          vim.cmd([[
-            highlight! semshiGlobal gui=italic
-            highlight! link semshiImported @none
-            highlight! link semshiParameter @lsp.type.parameter
-            highlight! link semshiParameterUnused DiagnosticUnnecessary
-            highlight! link semshiBuiltin @function.builtin
-            highlight! link semshiAttribute @field
-            highlight! link semshiSelf @lsp.type.selfKeyword
-            highlight! link semshiUnresolved @lsp.type.unresolvedReference
-            highlight! link semshiFree @none
-            ]])
-        end,
-      })
-    end,
   },
 
   {

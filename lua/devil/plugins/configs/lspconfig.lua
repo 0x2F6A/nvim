@@ -3,7 +3,7 @@ local lspconfig = require("lspconfig")
 local lsp_util = require("lspconfig.util")
 
 require("mason-lspconfig").setup({
-  automatic_installation = false,
+  automatic_installation = true,
   ensure_installed = { "clangd", "gopls", "lua_ls", "rust_analyzer", "ts_ls", "zls" },
 })
 
@@ -26,16 +26,10 @@ local noconfig_servers = {
   "lemminx",
   "marksman",
   "neocmake",
-  "nil_ls",
   "ruff",
-  "serve_d",
-  "slint_lsp",
-  "solargraph",
-  "standardrb",
   "svelte",
   "tailwindcss",
   "taplo",
-  "vala_ls",
   "vimls",
 }
 
@@ -48,8 +42,6 @@ local clangd_capabilities = require("blink.cmp").get_lsp_capabilities(utils.capa
 clangd_capabilities.offsetEncoding = { "utf-16" } ---@diagnostic disable-line
 lspconfig.clangd.setup({
   on_attach = function(client, bufnr)
-    require("clangd_extensions").setup()
-
     client.server_capabilities.documentFormattingProvider = false
     client.server_capabilities.documentRangeFormattingProvider = false
 
@@ -296,7 +288,7 @@ local tailwindcss = {
       "postcss.config.cjs",
       "postcss.config.mjs",
       "postcss.config.ts"
-    )(fname) or lsp_util.find_git_ancestor(fname)
+    )(fname) or vim.fs.dirname(vim.fs.find(".git", { path = fname, upward = true })[1])
   end,
 }
 
@@ -329,48 +321,12 @@ local pyright = {
   },
 }
 
--- phpactor, a open source PHP lsp. https://github.com/phpactor/phpactor
-local phpactor = {
-  init_options = {
-    ["language_server_worse_reflection.inlay_hints.enable"] = true,
-    ["language_server_worse_reflection.inlay_hints.types"] = true,
-    ["language_server_worse_reflection.inlay_hints.params"] = true,
-  },
-}
-
--- csharp-language-server, a omnisharp lsp's replacement(roslyn-based). https://github.com/razzmatazz/csharp-language-server
-local csharp_ls = {
-  handlers = {
-    ["textDocument/definition"] = require("csharpls_extended").handler,
-    ["textDocument/typeDefinition"] = require("csharpls_extended").handler,
-  },
-  init_options = {
-    AutomaticWorkspaceInit = true,
-  },
-}
-
--- kotlin-language-server, a community's kotlin lsp. https://github.com/fwcd/kotlin-language-server
-local kotlin_language_server = {
-  settings = {
-    kotlin = {
-      hints = {
-        typeHints = true,
-        parameterHints = true,
-        chaineHints = true,
-      },
-    },
-  },
-}
-
 local lsp_configs = {
-  ["csharp_ls"] = csharp_ls,
   ["denols"] = denols,
   ["eslint"] = eslint,
   ["gopls"] = gopls,
   ["jsonls"] = jsonls,
-  ["kotlin_language_server"] = kotlin_language_server,
   ["lua_ls"] = lua_ls,
-  ["phpactor"] = phpactor,
   ["pyright"] = pyright,
   ["svelte"] = svelte,
   ["tailwindcss"] = tailwindcss,
